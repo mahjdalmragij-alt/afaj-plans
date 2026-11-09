@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>خطة توزيع المناهج الدراسية - مدرسة العفج المتوسطة والابتدائية</title>
+    <title>خطة المرحلة المتوسطة الأسبوع الرابع عشر</title>
     <style id="dynamicPrintStyle">
         @page {
             size: A4 landscape;
@@ -837,7 +837,7 @@
                 </div>
             </div>
             <div class="nav-actions">
-                <button class="btn-action btn-print" onclick="window.print()" title="طباعة الخطة أو حفظ كملف PDF بتنسيق A4 أو A3 بالعرض">
+                <button class="btn-action btn-print" onclick="printPlan()" title="طباعة الخطة أو حفظ كملف PDF بتنسيق A4 أو A3 بالعرض">
                     🖨️ طباعة الخطة (تصدير PDF)
                 </button>
                 <button class="btn-action btn-view-mode" id="btnToggleMobileView" onclick="toggleMobileView()" title="التبديل بين عرض البطاقات السريع للجوال وعرض الورقة الرسمية">
@@ -976,11 +976,25 @@
             { key: "المهارات الحياتية", label: "الحياتية", width: "5%" }
         ];
 
+        // دالة تحديث اسم الملف عند الحفظ كـ PDF
+        function updateDocumentTitle() {
+            let stageLabel = "";
+            if (currentStage === "intermediate") {
+                stageLabel = "المرحلة المتوسطة";
+            } else if (currentStage === "elementary") {
+                stageLabel = "المرحلة الابتدائية";
+            } else {
+                stageLabel = "متوسطة وابتدائي";
+            }
+            const weekLabel = WEEK_NAMES[currentWeek] || currentWeek;
+            document.title = `خطة ${{stageLabel}} الأسبوع ${{weekLabel}}`;
+        }
+
         window.addEventListener("DOMContentLoaded", () => {
+            updateDocumentTitle();
             renderOfficialSheets();
             renderMobileCards();
             
-            // في الهواتف الصغيرة افتراضياً تفعيل عرض البطاقات
             if (window.innerWidth <= 768) {
                 isMobileViewActive = true;
                 updateViewModeButton();
@@ -989,8 +1003,13 @@
             }
         });
 
-        // ضمان تحديث محتوى الورقة الرسمية قبل الطباعة دائماً
+        function printPlan() {
+            updateDocumentTitle();
+            window.print();
+        }
+
         window.addEventListener("beforeprint", () => {
+            updateDocumentTitle();
             renderOfficialSheets();
             document.getElementById("planSheetsContainer").style.display = "block";
         });
@@ -1004,20 +1023,19 @@
         function switchStage(stage) {
             currentStage = stage;
             document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-            const activeBtn = document.querySelector(`.tab-btn.${stage}`);
+            const activeBtn = document.querySelector(`.tab-btn.${{stage}}`);
             if (activeBtn) activeBtn.classList.add("active");
 
-            // تعديل الثيم
             document.body.classList.remove("theme-intermediate", "theme-elementary", "theme-both");
-            document.body.classList.add(`theme-${stage}`);
+            document.body.classList.add(`theme-${{stage}}`);
 
-            // ضبط الصف الافتراضي لعرض الجوال
             if (stage === "elementary") {
                 currentMobileGrade = "4ب";
             } else {
                 currentMobileGrade = "1م";
             }
 
+            updateDocumentTitle();
             renderOfficialSheets();
             renderMobileCards();
         }
@@ -1027,6 +1045,7 @@
             document.querySelectorAll(".week-btn").forEach(btn => {
                 btn.classList.toggle("active", btn.getAttribute("data-week") === week);
             });
+            updateDocumentTitle();
             renderOfficialSheets();
             renderMobileCards();
         }
@@ -1039,7 +1058,6 @@
             document.body.classList.remove("paper-a4", "paper-a3");
             document.body.classList.add(size === "A3" ? "paper-a3" : "paper-a4");
 
-            // تحديث قاعدة @page ديناميكياً
             const dynamicStyle = document.getElementById("dynamicPrintStyle");
             if (dynamicStyle) {
                 if (size === "A3") {
@@ -1048,7 +1066,7 @@
                     dynamicStyle.innerHTML = "@page { size: A4 landscape; margin: 5mm 8mm; }";
                 }
             }
-            showToast(`تم ضبط مقاس الطباعة على ${size} بالعرض`);
+            showToast(`تم ضبط مقاس الطباعة على ${{size}} بالعرض`);
         }
 
         function toggleMobileView() {
@@ -1076,7 +1094,6 @@
             }
         }
 
-        /* === ريندر ورقة الطباعة الرسمية === */
         function renderOfficialSheets() {
             const container = document.getElementById("planSheetsContainer");
             if (!container) return;
@@ -1087,7 +1104,6 @@
             } else if (currentStage === "elementary") {
                 container.innerHTML = generateSheetHtml("elementary", currentWeek, false);
             } else {
-                // عرض المرحلتين معاً
                 container.innerHTML = generateSheetHtml("intermediate", currentWeek, true) + 
                                       generateSheetHtml("elementary", currentWeek, false);
             }
@@ -1104,43 +1120,42 @@
 
             if (!stageData) return "<div class='plan-sheet-wrapper'>لا توجد بيانات لهذا الأسبوع</div>";
 
-            const grades = stageData.grades || {};
+            const grades = stageData.grades || {{}};
 
             let tableHeaderHtml = "<tr>";
-            columns.forEach(col => {
-                tableHeaderHtml += `<th style="width: ${col.width};">${col.label}</th>`;
-            });
+            columns.forEach(col => {{
+                tableHeaderHtml += `<th style="width: ${{col.width}};">${{col.label}}</th>`;
+            }});
             tableHeaderHtml += "</tr>";
 
             let tableRowsHtml = "";
-            for (const [gradeName, subjects] of Object.entries(grades)) {
+            for (const [gradeName, subjects] of Object.entries(grades)) {{
                 tableRowsHtml += "<tr>";
-                tableRowsHtml += `<td class="grade-col">${gradeName}</td>`;
+                tableRowsHtml += `<td class="grade-col">${{gradeName}}</td>`;
 
-                for (let i = 1; i < columns.length; i++) {
+                for (let i = 1; i < columns.length; i++) {{
                     const col = columns[i];
                     let rawVal = subjects[col.key] || "-";
                     
-                    if (col.key === "التفكير الناقد" && (gradeName === "1م" || gradeName === "2م")) {
+                    if (col.key === "التفكير الناقد" && (gradeName === "1م" || gradeName === "2م")) {{
                         rawVal = "-";
-                    }
+                    }}
 
                     const formattedHtml = formatLessonContent(rawVal);
 
                     tableRowsHtml += `
-                        <td class="lesson-cell" contenteditable="${isEditMode ? 'true' : 'false'}">
+                        <td class="lesson-cell" contenteditable="${{isEditMode ? 'true' : 'false'}}">
                             <button class="copy-cell-btn no-print" onclick="copyCell(this)" title="نسخ هذا الدرس">📋 نسخ</button>
-                            <div class="cell-content">${formattedHtml}</div>
+                            <div class="cell-content">${{formattedHtml}}</div>
                         </td>
                     `;
-                }
+                }}
                 tableRowsHtml += "</tr>";
-            }
+            }}
 
             return `
-                <div class="plan-sheet-wrapper ${sheetClass} ${breakClass}">
+                <div class="plan-sheet-wrapper ${{sheetClass}} ${{breakClass}}">
                     <div class="plan-sheet">
-                        <!-- ترويسة الورقة الرسمية المطابقة للوزارة مع شعار الرؤية والوزارة المكبرين -->
                         <div class="sheet-header">
                             <div class="cliche-right">
                                 <div>المملكة العربية السعودية</div>
@@ -1151,29 +1166,27 @@
                             <div class="title-center">
                                 <div class="main-heading">الخطة التعليمية للفصل الأول للعام 1448 هـ</div>
                                 <div class="sub-heading-bar">
-                                    <span class="badge-info">الأسبوع / <strong>${weekTitle}</strong></span>
-                                    <span class="badge-info">المرحلة / <strong>${stageTitle}</strong></span>
+                                    <span class="badge-info">الأسبوع / <strong>${{weekTitle}}</strong></span>
+                                    <span class="badge-info">المرحلة / <strong>${{stageTitle}}</strong></span>
                                 </div>
                             </div>
                             <div class="logos-container">
-                                <img src="${MOE_LOGO}" alt="وزارة التعليم" class="moe-logo" title="وزارة التعليم">
-                                <img src="${VISION_LOGO}" alt="رؤية 2030" class="v2030-logo" title="رؤية 2030">
+                                <img src="${{MOE_LOGO}}" alt="وزارة التعليم" class="moe-logo" title="وزارة التعليم">
+                                <img src="${{VISION_LOGO}}" alt="رؤية 2030" class="v2030-logo" title="رؤية 2030">
                             </div>
                         </div>
 
-                        <!-- جدول الخطة الكامل -->
                         <div class="table-responsive">
                             <table class="plan-table">
                                 <thead>
-                                    ${tableHeaderHtml}
+                                    ${{tableHeaderHtml}}
                                 </thead>
                                 <tbody>
-                                    ${tableRowsHtml}
+                                    ${{tableRowsHtml}}
                                 </tbody>
                             </table>
                         </div>
 
-                        <!-- خانة توقيع مدير المدرسة فقط (بدون المشرف وبدون المعلمين) -->
                         <div class="signatures-box-single">
                             <div class="sig-manager-block">
                                 <div class="sig-title">مدير المدرسة</div>
@@ -1183,129 +1196,128 @@
                     </div>
                 </div>
             `;
-        }
+        }}
 
-        /* === ريندر عرض بطاقات الجوال الذكي === */
-        function renderMobileCards() {
+        function renderMobileCards() {{
             const tabsContainer = document.getElementById("mobileGradeTabs");
             const gridContainer = document.getElementById("mobileCardsGrid");
             if (!tabsContainer || !gridContainer) return;
 
             let availableGrades = [];
-            if (currentStage === "intermediate") {
+            if (currentStage === "intermediate") {{
                 availableGrades = ["1م", "2م", "3م"];
-            } else if (currentStage === "elementary") {
+            }} else if (currentStage === "elementary") {{
                 availableGrades = ["4ب", "5ب", "6ب"];
-            } else {
+            }} else {{
                 availableGrades = ["1م", "2م", "3م", "4ب", "5ب", "6ب"];
-            }
+            }}
 
-            if (!availableGrades.includes(currentMobileGrade)) {
+            if (!availableGrades.includes(currentMobileGrade)) {{
                 currentMobileGrade = availableGrades[0];
-            }
+            }}
 
             tabsContainer.innerHTML = availableGrades.map(g => `
-                <button class="grade-pill-btn ${g === currentMobileGrade ? 'active' : ''}" onclick="selectMobileGrade('${g}')">
-                    الصف ${g}
+                <button class="grade-pill-btn ${{g === currentMobileGrade ? 'active' : ''}}" onclick="selectMobileGrade('${{g}}')">
+                    الصف ${{g}}
                 </button>
             `).join("");
 
             const isInterGrade = ["1م", "2م", "3م"].includes(currentMobileGrade);
             const stageData = isInterGrade ? INTER_DATA[currentWeek] : ELEM_DATA[currentWeek];
-            const subjects = (stageData && stageData.grades && stageData.grades[currentMobileGrade]) || {};
+            const subjects = (stageData && stageData.grades && stageData.grades[currentMobileGrade]) || {{}};
 
             let cardsHtml = "";
-            for (const [subjName, content] of Object.entries(subjects)) {
-                if (subjName === "التفكير الناقد" && (currentMobileGrade === "1م" || currentMobileGrade === "2م")) {
+            for (const [subjName, content] of Object.entries(subjects)) {{
+                if (subjName === "التفكير الناقد" && (currentMobileGrade === "1م" || currentMobileGrade === "2م")) {{
                     continue;
-                }
+                }}
                 const icon = SUBJECT_ICONS[subjName] || "📘";
                 const formattedHtml = formatLessonContent(content);
                 const plainText = content.replace(/'/g, "\'");
-                const encodedWhatsapp = encodeURIComponent(`*خطة ${subjName} - الصف ${currentMobileGrade} (الأسبوع ${WEEK_NAMES[currentWeek]})*\n\n${content}`);
+                const encodedWhatsapp = encodeURIComponent(`*خطة ${{subjName}} - الصف ${{currentMobileGrade}} (الأسبوع ${{WEEK_NAMES[currentWeek]}})*\n\n${{content}}`);
 
                 cardsHtml += `
                     <div class="subject-card">
                         <div>
                             <div class="card-header">
                                 <div class="card-subject-name">
-                                    <span>${icon}</span>
-                                    <span>${subjName}</span>
+                                    <span>${{icon}}</span>
+                                    <span>${{subjName}}</span>
                                 </div>
                             </div>
                             <div class="card-body">
-                                ${formattedHtml}
+                                ${{formattedHtml}}
                             </div>
                         </div>
                         <div class="card-actions">
-                            <button class="btn-card-copy" onclick="copyText('${plainText}')">
+                            <button class="btn-card-copy" onclick="copyText('${{plainText}}')">
                                 📋 نسخ المادة
                             </button>
-                            <a class="btn-card-whatsapp" href="https://api.whatsapp.com/send?text=${encodedWhatsapp}" target="_blank">
+                            <a class="btn-card-whatsapp" href="https://api.whatsapp.com/send?text=${{encodedWhatsapp}}" target="_blank">
                                 💬 إرسال واتساب
                             </a>
                         </div>
                     </div>
                 `;
-            }
+            }}
 
             gridContainer.innerHTML = cardsHtml;
-        }
+        }}
 
-        function selectMobileGrade(grade) {
+        function selectMobileGrade(grade) {{
             currentMobileGrade = grade;
             renderMobileCards();
-        }
+        }}
 
-        function formatLessonContent(text) {
+        function formatLessonContent(text) {{
             if (!text || text.trim() === "-" || text.trim() === "") return "-";
             const lines = text.split("\n");
-            return lines.map(line => {
+            return lines.map(line => {{
                 let cleanLine = line.trim();
                 if (!cleanLine) return "";
                 
-                if (cleanLine.includes(":")) {
+                if (cleanLine.includes(":")) {{
                     const colonIdx = cleanLine.indexOf(":");
                     const prefix = cleanLine.substring(0, colonIdx + 1);
                     const rest = cleanLine.substring(colonIdx + 1);
-                    return `<span class="bullet-item"><span class="branch-tag">${prefix}</span>${rest}</span>`;
-                }
-                return `<span class="bullet-item">${cleanLine}</span>`;
-            }).filter(Boolean).join("");
-        }
+                    return `<span class="bullet-item"><span class="branch-tag">${{prefix}}</span>${{rest}}</span>`;
+                }}
+                return `<span class="bullet-item">${{cleanLine}}</span>`;
+            }}).filter(Boolean).join("");
+        }}
 
-        function toggleEditMode() {
+        function toggleEditMode() {{
             isEditMode = !isEditMode;
             const btn = document.getElementById("btnToggleEdit");
             btn.innerHTML = isEditMode ? "💾 إيقاف التعديل" : "✏️ تعديل النصوص يدويًا";
             btn.style.backgroundColor = isEditMode ? "#dc2626" : "#e2e8f0";
             btn.style.color = isEditMode ? "#ffffff" : "#334155";
-            document.querySelectorAll(".lesson-cell").forEach(cell => {
+            document.querySelectorAll(".lesson-cell").forEach(cell => {{
                 cell.setAttribute("contenteditable", isEditMode ? "true" : "false");
-            });
+            }});
             document.body.classList.toggle("editable-active", isEditMode);
             showToast(isEditMode ? "تم تفعيل التعديل! يمكنك الضغط على أي خلية وتعديلها مباشرة." : "تم حفظ التعديلات!");
-        }
+        }}
 
-        function copyCell(btn) {
+        function copyCell(btn) {{
             const cellContent = btn.parentElement.querySelector(".cell-content");
-            if (cellContent) {
+            if (cellContent) {{
                 copyText(cellContent.innerText.trim());
-            }
-        }
+            }}
+        }}
 
-        function copyText(text) {
+        function copyText(text) {{
             if (!text || text === "-") return;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {{
+                navigator.clipboard.writeText(text).then(() => {{
                     showToast("تم نسخ النص إلى الحافظة!");
-                }).catch(() => fallbackCopy(text));
-            } else {
+                }}).catch(() => fallbackCopy(text));
+            }} else {{
                 fallbackCopy(text);
-            }
-        }
+            }}
+        }}
 
-        function fallbackCopy(text) {
+        function fallbackCopy(text) {{
             const ta = document.createElement("textarea");
             ta.value = text;
             ta.style.position = "fixed";
@@ -1315,34 +1327,34 @@
             document.execCommand("copy");
             document.body.removeChild(ta);
             showToast("تم نسخ النص إلى الحافظة!");
-        }
+        }}
 
-        function copyFullPlanTable() {
+        function copyFullPlanTable() {{
             const activeSheets = document.querySelectorAll(".plan-table");
             if (!activeSheets.length) return;
 
-            let fullText = `خطة مدرسة العفج - الأسبوع ${WEEK_NAMES[currentWeek] || currentWeek}\n\n`;
-            activeSheets.forEach((tbl) => {
+            let fullText = `خطة مدرسة العفج - الأسبوع ${{WEEK_NAMES[currentWeek] || currentWeek}}\n\n`;
+            activeSheets.forEach((tbl) => {{
                 const rows = tbl.querySelectorAll("tr");
-                rows.forEach(r => {
+                rows.forEach(r => {{
                     const cells = Array.from(r.querySelectorAll("th, td")).map(c => c.innerText.replace(/\n/g, " ").trim());
                     fullText += cells.join(" | ") + "\n";
-                });
+                }});
                 fullText += "\n--------------------------------------------\n";
-            });
+            }});
 
             copyText(fullText);
             showToast("تم نسخ جدول الخطة بالكامل!");
-        }
+        }}
 
-        function showToast(msg) {
+        function showToast(msg) {{
             const toast = document.getElementById("toastNotification");
             toast.textContent = msg;
             toast.style.display = "block";
-            setTimeout(() => {
+            setTimeout(() => {{
                 toast.style.display = "none";
-            }, 2500);
-        }
+            }}, 2500);
+        }}
     </script>
 </body>
 </html>
