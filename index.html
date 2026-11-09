@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>خطة توزيع المناهج الدراسية - مدرسة العفج المتوسطة والابتدائية</title>
+    <style id="dynamicPrintStyle">
+        @page {
+            size: A4 landscape;
+            margin: 5mm 8mm;
+        }
+    </style>
+    <style>
+        /* === الأساسيات والخطوط الرسمية === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Tahoma, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            min-height: 100vh;
+            line-height: 1.45;
+        }
+
+        /* === الشريط العلوي التفاعلي (يختفي عند الطباعة) === */
+        .top-navbar {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            padding: 12px 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .navbar-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .school-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .school-info h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+        .school-info p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .btn-print {
+            background-color: #059669;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+        }
+        .btn-print:hover {
+            background-color: #047857;
+            transform: translateY(-1px);
+        }
+        .btn-view-mode {
+            background-color: #0284c7;
+            color: #ffffff;
+        }
+        .btn-view-mode:hover {
+            background-color: #0369a1;
+        }
+        .btn-copy-all {
+            background-color: #475569;
+            color: #ffffff;
+        }
+        .btn-copy-all:hover {
+            background-color: #334155;
+        }
+
+        /* === حاوية التطبيق الرئيسية === */
+        .app-container {
+            max-width: 1440px;
+            margin: 16px auto 40px;
+            padding: 0 16px;
+        }
+
+        /* === بطاقة التحكم واختيار الأسبوع والمرحلة === */
+        .controls-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        }
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .controls-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+        }
+        .row-label {
+            font-weight: 800;
+            font-size: 14px;
+            color: #1e293b;
+            min-width: 110px;
+        }
+        .stage-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid #cbd5e1;
+            background-color: #f8fafc;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+        .tab-btn.intermediate.active {
+            background-color: #065f46;
+            color: #ffffff;
+            border-color: #065f46;
+            box-shadow: 0 2px 8px rgba(6, 95, 70, 0.3);
+        }
+        .tab-btn.elementary.active {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border-color: #1e3a8a;
+            box-shadow: 0 2px 8px rgba(30, 58, 138, 0.3);
+        }
+        .tab-btn.both.active {
+            background-color: #334155;
+            color: #ffffff;
+            border-color: #334155;
+        }
+
+        .week-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        .week-btn {
+            flex-shrink: 0;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1.5px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #1e293b;
+            transition: all 0.2s;
+        }
+        .week-btn:hover {
+            background-color: #f1f5f9;
+        }
+        .theme-intermediate .week-btn.active {
+            background-color: #047857;
+            color: #ffffff;
+            border-color: #047857;
+        }
+        .theme-elementary .week-btn.active {
+            background-color: #1e40af;
+            color: #ffffff;
+            border-color: #1e40af;
+        }
+        .theme-both .week-btn.active {
+            background-color: #0f172a;
+            color: #ffffff;
+            border-color: #0f172a;
+        }
+
+        /* محول حجم الورق A4 / A3 */
+        .paper-selector {
+            display: flex;
+            gap: 6px;
+            background-color: #f1f5f9;
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+        }
+        .paper-pill {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 800;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.15s;
+        }
+        .paper-pill.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+
+        /* ==============================================================
+           عرض بطاقات الجوال الذكي (MOBILE CARDS VIEW)
+           ============================================================== */
+        #mobileCardsView {
+            display: none;
+        }
+        .mobile-grade-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+            padding: 2px 0;
+        }
+        .grade-pill-btn {
+            flex: 1;
+            min-width: 90px;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: center;
+            border: 2px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            cursor: pointer;
+        }
+        .theme-intermediate .grade-pill-btn.active {
+            background-color: #065f46;
+            color: #ffffff;
+            border-color: #065f46;
+        }
+        .theme-elementary .grade-pill-btn.active {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            border-color: #1e3a8a;
+        }
+        .mobile-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        @media (min-width: 640px) {
+            .mobile-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .subject-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            padding: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .card-subject-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .theme-intermediate .card-subject-name {
+            color: #065f46;
+        }
+        .theme-elementary .card-subject-name {
+            color: #1e3a8a;
+        }
+        .card-body {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #334155;
+            margin-bottom: 12px;
+        }
+        .card-body .bullet-item {
+            margin-bottom: 6px;
+        }
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #f1f5f9;
+        }
+        .btn-card-copy, .btn-card-whatsapp {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
+        }
+        .btn-card-copy {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-card-copy:hover {
+            background-color: #e2e8f0;
+        }
+        .btn-card-whatsapp {
+            background-color: #25d366;
+            color: #ffffff;
+        }
+        .btn-card-whatsapp:hover {
+            background-color: #1ebc59;
+        }
+
+        /* ==============================================================
+           عرض ورقة الخطة الرسمية (TABLE & PRINT SHEET)
+           ============================================================== */
+        .plan-sheet-wrapper {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .plan-sheet {
+            width: 100%;
+        }
+
+        /* ترويسة ورقة الخطة الرسمية */
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            gap: 12px;
+        }
+        .cliche-right {
+            text-align: right;
+            font-weight: 800;
+            font-size: 13px;
+            line-height: 1.45;
+            color: #0f172a;
+            min-width: 210px;
+        }
+        .title-center {
+            text-align: center;
+            flex-grow: 1;
+            padding: 0 10px;
+        }
+        .main-heading {
+            font-size: 21px;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+        .sub-heading-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+        .sub-heading-bar .badge-info {
+            padding: 3px 14px;
+            border-radius: 6px;
+        }
+        .sheet-intermediate .badge-info {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .sheet-elementary .badge-info {
+            background-color: #eff6ff;
+            color: #1e3a8a;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* شعارات الرؤية والوزارة */
+        .logos-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            min-width: 220px;
+        }
+        .moe-logo {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
+        }
+        .v2030-logo {
+            height: 52px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* جدول الخطة */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+        table.plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background-color: #ffffff;
+            font-size: 12px;
+        }
+        table.plan-table th, table.plan-table td {
+            border: 1.5px solid #cbd5e1;
+            padding: 8px 6px;
+            vertical-align: top;
+            text-align: right;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* ألوان الترويسة */
+        .sheet-intermediate table.plan-table th {
+            background-color: #065f46 !important;
+            color: #ffffff !important;
+            border-color: #047857;
+            font-weight: 800;
+            text-align: center;
+            font-size: 13px;
+        }
+        .sheet-elementary table.plan-table th {
+            background-color: #1e3a8a !important;
+            color: #ffffff !important;
+            border-color: #1e40af;
+            font-weight: 800;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* عمود الصف */
+        .grade-col {
+            width: 48px !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            font-weight: 900 !important;
+            font-size: 15px !important;
+        }
+        .sheet-intermediate .grade-col {
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+            border-left: 2px solid #059669 !important;
+        }
+        .sheet-elementary .grade-col {
+            background-color: #eff6ff !important;
+            color: #1e3a8a !important;
+            border-left: 2px solid #2563eb !important;
+        }
+
+        /* خلايا المواد */
+        .lesson-cell {
+            position: relative;
+        }
+        .cell-content {
+            font-size: 11.5px;
+            line-height: 1.45;
+            color: #1e293b;
+        }
+        .cell-content .bullet-item {
+            display: block;
+            margin-bottom: 3.5px;
+        }
+        .cell-content .bullet-item:last-child {
+            margin-bottom: 0;
+        }
+        .branch-tag {
+            font-weight: 800;
+        }
+        .sheet-intermediate .branch-tag {
+            color: #065f46;
+        }
+        .sheet-elementary .branch-tag {
+            color: #1e3a8a;
+        }
+
+        .copy-cell-btn {
+            display: none;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+        td:hover .copy-cell-btn {
+            display: block;
+        }
+
+        /* تذييل التوقيع (مدير المدرسة فقط) */
+        .signatures-box-single {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1.5px solid #e2e8f0;
+        }
+        .sig-manager-block {
+            text-align: center;
+            min-width: 250px;
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #1e293b;
+        }
+        .sig-line {
+            margin-top: 24px;
+            color: #94a3b8;
+            font-size: 12px;
+            letter-spacing: 2px;
+        }
+
+        /* إشعار الحافظة */
+        .toast-notification {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f172a;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            display: none;
+            z-index: 9999;
+            border: 1px solid #334155;
+        }
+
+        /* تعديل يدوي */
+        .editable-active .lesson-cell[contenteditable="true"] {
+            outline: 2px dashed #059669;
+            background-color: #fffff0;
+        }
+
+        /* ==============================================================
+           تنسيقات الطباعة والتصدير كـ PDF (A4 و A3 بالعرض)
+           ============================================================== */
+        @media print {
+            html, body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .no-print, #mobileCardsView {
+                display: none !important;
+            }
+            #planSheetsContainer {
+                display: block !important;
+            }
+            .app-container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .plan-sheet-wrapper {
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                page-break-inside: avoid !important;
+                display: block !important;
+            }
+            .page-break-print {
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+            .sheet-header {
+                margin-bottom: 5px !important;
+                padding-bottom: 5px !important;
+                border-bottom: 1.5px solid #000000 !important;
+            }
+            table.plan-table {
+                border: 1.2px solid #000000 !important;
+            }
+            table.plan-table th, table.plan-table td {
+                border: 1px solid #000000 !important;
+            }
+            table.plan-table th {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .sheet-intermediate table.plan-table th {
+                background-color: #065f46 !important;
+                color: #ffffff !important;
+            }
+            .sheet-elementary table.plan-table th {
+                background-color: #1e3a8a !important;
+                color: #ffffff !important;
+            }
+            .grade-col {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .sheet-intermediate .grade-col {
+                background-color: #ecfdf5 !important;
+                color: #065f46 !important;
+            }
+            .sheet-elementary .grade-col {
+                background-color: #eff6ff !important;
+                color: #1e3a8a !important;
+            }
+            .copy-cell-btn {
+                display: none !important;
+            }
+            .signatures-box-single {
+                margin-top: 5px !important;
+                padding-top: 5px !important;
+                border-top: 1px solid #000000 !important;
+            }
+
+            /* --- مقاس A4 --- */
+            body.paper-a4 {
+                font-size: 7.5pt !important;
+            }
+            body.paper-a4 .cliche-right {
+                font-size: 7.5pt !important;
+                line-height: 1.25 !important;
+                min-width: 140px !important;
+            }
+            body.paper-a4 .main-heading {
+                font-size: 13.5pt !important;
+                margin-bottom: 2px !important;
+            }
+            body.paper-a4 .sub-heading-bar {
+                font-size: 8.5pt !important;
+                gap: 15px !important;
+            }
+            body.paper-a4 .moe-logo {
+                height: 44px !important;
+            }
+            body.paper-a4 .v2030-logo {
+                height: 38px !important;
+            }
+            body.paper-a4 table.plan-table {
+                font-size: 6.8pt !important;
+            }
+            body.paper-a4 table.plan-table th {
+                font-size: 7.2pt !important;
+                padding: 3.5px 2px !important;
+            }
+            body.paper-a4 table.plan-table td {
+                padding: 2.2px 3px !important;
+                line-height: 1.18 !important;
+            }
+            body.paper-a4 .grade-col {
+                font-size: 8pt !important;
+                width: 28px !important;
+            }
+            body.paper-a4 .cell-content {
+                font-size: 6.6pt !important;
+                line-height: 1.18 !important;
+            }
+            body.paper-a4 .sig-manager-block {
+                font-size: 7.5pt !important;
+                min-width: 180px !important;
+            }
+            body.paper-a4 .sig-line {
+                margin-top: 10px !important;
+            }
+
+            /* --- مقاس A3 --- */
+            body.paper-a3 {
+                font-size: 10.5pt !important;
+            }
+            body.paper-a3 .cliche-right {
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+                min-width: 200px !important;
+            }
+            body.paper-a3 .main-heading {
+                font-size: 20pt !important;
+                margin-bottom: 4px !important;
+            }
+            body.paper-a3 .sub-heading-bar {
+                font-size: 13pt !important;
+                gap: 24px !important;
+            }
+            body.paper-a3 .moe-logo {
+                height: 68px !important;
+            }
+            body.paper-a3 .v2030-logo {
+                height: 58px !important;
+            }
+            body.paper-a3 table.plan-table {
+                font-size: 9.5pt !important;
+            }
+            body.paper-a3 table.plan-table th {
+                font-size: 11pt !important;
+                padding: 7px 4px !important;
+            }
+            body.paper-a3 table.plan-table td {
+                padding: 5px 6px !important;
+                line-height: 1.35 !important;
+            }
+            body.paper-a3 .grade-col {
+                font-size: 12pt !important;
+                width: 44px !important;
+            }
+            body.paper-a3 .cell-content {
+                font-size: 9.5pt !important;
+                line-height: 1.35 !important;
+            }
+            body.paper-a3 .sig-manager-block {
+                font-size: 11pt !important;
+                min-width: 260px !important;
+            }
+            body.paper-a3 .sig-line {
+                margin-top: 18px !important;
+            }
+        }
+
+        /* === تحسينات الهواتف الذكية للشاشات فقط === */
+        @media screen and (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-actions {
+                justify-content: stretch;
+            }
+            .btn-action {
+                flex: 1;
+                justify-content: center;
+                padding: 10px;
+                font-size: 13px;
+            }
+            .controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .stage-tabs, .week-tabs {
+                width: 100%;
+            }
+            .tab-btn {
+                flex: 1;
+                text-align: center;
+                padding: 8px 10px;
+                font-size: 12.5px;
+            }
+            .sheet-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+            .cliche-right {
+                text-align: center;
+            }
+            .logos-container {
+                justify-content: center;
+            }
+            .sub-heading-bar {
+                flex-direction: column;
+                gap: 6px;
+            }
+            .signatures-box-single {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body class="theme-intermediate paper-a4">
+
+    <!-- الشريط العلوي التفاعلي -->
+    <div class="top-navbar no-print">
+        <div class="navbar-content">
+            <div class="school-info">
+                <div>
+                    <h1>مدرسة العفج المتوسطة والابتدائية - خطة المناهج الأسبوعية</h1>
+                    <p>الفصل الدراسي الأول 1448 هـ | توزيع المواد المعتمد طبقاً لمنصة تحضيري الرسمية</p>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-action btn-print" onclick="window.print()" title="طباعة الخطة أو حفظ كملف PDF بتنسيق A4 أو A3 بالعرض">
+                    🖨️ طباعة الخطة (تصدير PDF)
+                </button>
+                <button class="btn-action btn-view-mode" id="btnToggleMobileView" onclick="toggleMobileView()" title="التبديل بين عرض البطاقات السريع للجوال وعرض الورقة الرسمية">
+                    📱 عرض الجوال الذكي
+                </button>
+                <button class="btn-action btn-copy-all" onclick="copyFullPlanTable()" title="نسخ الجدول بالكامل لاستخدامه في برامج أخرى">
+                    📋 نسخ الخطة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- لوحة التحكم بالاختيارات -->
+        <div class="controls-card no-print">
+            <!-- اختيار المرحلة -->
+            <div class="controls-row">
+                <div class="row-label">المرحلة الدراسية:</div>
+                <div class="stage-tabs">
+                    <button class="tab-btn intermediate active" onclick="switchStage('intermediate')">
+                        📗 المرحلة المتوسطة (1م، 2م، 3م)
+                    </button>
+                    <button class="tab-btn elementary" onclick="switchStage('elementary')">
+                        📘 المرحلة الابتدائية (4ب، 5ب، 6ب)
+                    </button>
+                    <button class="tab-btn both" onclick="switchStage('both')">
+                        📑 عرض المرحلتين معاً (للطباعة الشاملة)
+                    </button>
+                </div>
+            </div>
+
+            <!-- اختيار الأسبوع -->
+            <div class="controls-row">
+                <div class="row-label">الأسبوع الدراسي:</div>
+                <div class="week-tabs">
+                    <button class="week-btn active" data-week="14" onclick="switchWeek('14')">الأسبوع 14 (الرابع عشر)</button>
+                    <button class="week-btn" data-week="15" onclick="switchWeek('15')">الأسبوع 15 (الخامس عشر)</button>
+                    <button class="week-btn" data-week="16" onclick="switchWeek('16')">الأسبوع 16 (السادس عشر)</button>
+                    <button class="week-btn" data-week="17" onclick="switchWeek('17')">الأسبوع 17 (السابع عشر)</button>
+                    <button class="week-btn" data-week="18" onclick="switchWeek('18')">الأسبوع 18 (الثامن عشر - مراجعة)</button>
+                </div>
+            </div>
+
+            <!-- خيارات مقاس الورق والتعديل -->
+            <div class="controls-row">
+                <div class="row-label">مقاس الطباعة والتصدير:</div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <div class="paper-selector">
+                        <button class="paper-pill active" id="pillA4" onclick="setPaperSize('A4')">📄 مقاس A4 (ورقة عادية)</button>
+                        <button class="paper-pill" id="pillA3" onclick="setPaperSize('A3')">📜 مقاس A3 (ورقة كبيرة للتعليق)</button>
+                    </div>
+                    <button class="btn-action" style="background:#e2e8f0; color:#334155; padding:6px 12px; font-size:12.5px;" id="btnToggleEdit" onclick="toggleEditMode()">
+                        ✏️ تعديل النصوص يدويًا
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- عرض بطاقات الجوال الذكي (يظهر بالهواتف أو عند التبديل) -->
+        <div id="mobileCardsView" class="no-print">
+            <div class="mobile-grade-selector" id="mobileGradeTabs"></div>
+            <div class="mobile-cards-grid" id="mobileCardsGrid"></div>
+        </div>
+
+        <!-- منطقة عرض أوراق الخطة الرسمية (للشاشات والطباعة والـ PDF) -->
+        <div id="planSheetsContainer"></div>
+    </div>
+
+    <!-- رسالة الإشعار التفاعلية -->
+    <div id="toastNotification" class="toast-notification">تم النسخ بنجاح!</div>
+
+    <!-- بيانات الخطة البرمجية المدمجة والمنطق التفاعلي -->
+    <script>
+        const INTER_DATA = {"14": {"weekNumber": 14, "weekTitle": "الأسبوع الرابع عشر (14)", "stage": "المرحلة المتوسطة", "grades": {"1م": {"الدراسات الإسلامية": "• الفقه (شروط الصلاة وأركانها وواجباتها): شروط الصلاة\n• القرآن الكريم: تلاوة سورة القصص من أية (68) إلى (78)\n• الحديث (الصحبة وحسن الخلق): الجليس الصالح وجليس السوء\n• التفسير (سورة القصص): تفسير سورة القصص 79-82", "لغتي": "• أتواصل كتابيًا (تعبئة استمارة تعريفية معلوماتية)\n• نص الاستماع (فرسان الجزيرة الحالمة)\n• نص الدعم (بئر الدمام رقم 7)", "الاجتماعيات": "• غزوات النبي محمد صلى الله عليه وسلم", "الرياضيات": "• القياس: التحويل بين الوحدات الإنجليزية\n• القياس: التحويل بين الوحدات المترية", "العلوم": "• أنواع الصخور", "اللغة الإنجليزية": "• Conversation + About you\n• مراجعة\n• Reading\n• Writing +Project+ Form, Meaning and  Function", "المهارات الرقمية": "• الرسم باستخدام البرمجة", "التربية البدنية": "• الخامسة: كرة اليد: وقفة الاستعداد في الدفاع", "التربية الفنية": "• مجال أشغال المعادن: التشكيل المباشر بالأسلاك المعدنية", "المهارات الحياتية": "• المشروبات"}, "2م": {"الدراسات الإسلامية": "• الحديث (مكانة العمل في الإسلام): الحث على العمل\n• القرآن الكريم: تلاوة سورة النور من أية (26) إلى (32) حفظ سورة المنافقون من أية (7) إلى (11)\n• التفسير (سورة المؤمنون): المؤمنون من 1 الى 11\n• التوحيد (عبادات وقع فيها الشرك): الاستعانة والاستعاذة", "لغتي": "• الأسلوب اللغوي (التوكيد)\n• الوظيفة النحوية (المفعول به)\n• استراتيجية الكتابة (الفن الكتابي) تحويل نص حواري الى نص سردي", "الاجتماعيات": "• العوامل الداخلية والخارجية لتشــكيل ســطح الأرض", "الرياضيات": "• استراتيجية حل المسألة التبرير المنطقي\n• المضلعات والزوايا\n• تطابق المضلعات", "العلوم": "• المناعة و المرض", "اللغة الإنجليزية": "• Conversation - About you\n• مراجعة\n• Reading\n• Writing + Project +Form, Meaning and Function", "المهارات الرقمية": "• الدوال (Functions)", "التربية البدنية": "• الدحرجة الأمامية الطائرة", "التربية الفنية": "• مجال الخزف: البلاطات الخزفية", "المهارات الحياتية": "• شطيرة الفلافل"}, "3م": {"الدراسات الإسلامية": "• التوحيد: الأيمان\n• القرآن الكريم: تلاوة سورة مريم من أية (75) إلى (98)\n• الحديث (أخلاق وسلوك رغب فيها الإسلام1): الدلالة على الخير\n• التفسير (تفسير سورة الكهف): تفسير الآيات (74-82) من سورة الكهف", "لغتي": "• الوظيفة النحوية (المسثنى)\n• إستراتيجية الكتابة\n• عناصر الفن الكتابي (بسط الموجز)\n• الأداء الكتابي (تخطيط كتابة الموضوع)", "الاجتماعيات": "• سلطات الدولة\n• مجلس الوزراء", "الرياضيات": "• حل نظام من معادلتين خطيتين بالتعويض\n• حل نظام من معادلتين خطيتين بالحذف باستعمال الجمع او الطرح", "العلوم": "• مقدمة في الجدول الدوري", "اللغة الإنجليزية": "• Listen and Discuss + Pair work\n• Grammar", "المهارات الرقمية": "• القوائم المتداخلة (Nested lists)", "التربية البدنية": "• الرابعة:كرة السلة: التصويب مع الحركة (الثلاثية)", "التربية الفنية": "• مجال الخزف: هوية الخزف العربية", "التفكير الناقد": "• التفكير الناقد والإعلام", "المهارات الحياتية": "• أصناف من بيئتي – دقيق القمح"}}}, "15": {"weekNumber": 15, "weekTitle": "الأسبوع الخامس عشر (15)", "stage": "المرحلة المتوسطة", "grades": {"1م": {"الدراسات الإسلامية": "• الفقه (شروط الصلاة وأركانها وواجباتها): أركان الصلاة\n• القرآن الكريم: تلاوة سورة القصص من أية (79) إلى (88)\n• الحديث (الصحبة وحسن الخلق): الخلق الحسن\n• التفسير (سورة القصص): تفسير سورة القصص 83-84", "لغتي": "• التنمية القرائية 2\n• الصنف اللغوي (جمع التكسير)\n• الوظيفة النحوية (الحروف الناسخة)", "الاجتماعيات": "• شمائل نبينا محمد صلى الله عليه وسلم", "الرياضيات": "• الجبر: حل التناسبات\n• استراتيجية حل المسألة", "العلوم": "• صفائح الأرض المتحركة", "اللغة الإنجليزية": "• Listening and Discuss + Pair work\n• Grammar\n• Listening + Pronunciation\n• Conversation + About you", "المهارات الرقمية": "• مشروع الوحدة", "التربية البدنية": "• الخامسة: كرة اليد: التصويب من مستوى الحوض", "التربية الفنية": "• مجال أشغال المعادن: التشكيل المباشر بالأسلاك المعدنية\n• مجال أشغال المعادن: مجسمات جمالية", "المهارات الحياتية": "• التمور"}, "2م": {"الدراسات الإسلامية": "• الصيام وأحكامه: مستحبات الصوم وصيام التطوع\n• القرآن الكريم: تلاوة سورة النور من أية (33) إلى (34)\n• التفسير (سورة المؤمنون): تفسير الآيات (51-61) من سورة المؤمنون\n• التوحيد (عبادات وقع فيها الشرك): الذبح", "لغتي": "• الأداء الكتابي (تخطيط كتابة الموضوع)\n• كتابة المسودة\n• الأداء الكتابي (المراجعة والتنقيح)", "الاجتماعيات": "• الغــلاف الحيــوي", "الرياضيات": "• توسع: استقصاء تطابق المثلثات\n• التماثل\n• الإنعكاس", "العلوم": "• الجهاز الهضمي والمواد الغذائية", "اللغة الإنجليزية": "• Listen and Discuss + Pair work\n• Grammar\n• Listening + Pronunciation\n• Conversation - About you", "المهارات الرقمية": "• جداول بيانات إكسل في باثيون", "التربية البدنية": "• الشقلبة الأمامية على اليدين بالارتقاء المفرد", "التربية الفنية": "• مجال الخزف: البلاطات الخزفية\n• مجال الخزف: تزجيج الأواني الفخارية", "المهارات الحياتية": "• شطيرة التونة"}, "3م": {"الدراسات الإسلامية": "• الحديث (أخلاق وسلوك رغب فيها الإسلام1): الإصلاح بين الناس\n• التفسير (تفسير سورة الكهف): تفسير الآيات (99-106) من سورة الكهف\n• التنجيم: أبراج الحظ", "لغتي": "• كتابة المسودة\n• الأداء الكتابي (المراجعة والتنقيح)", "الاجتماعيات": "• مجلس الشورى", "الرياضيات": "• حل نظام من معادلتين خطيتين بالحذف باستعمال الضرب", "العلوم": "• العناصر الممثلة", "اللغة الإنجليزية": "• Language in Context +listening + pronunciation +about you +Conversation\n• Reading + Project", "المهارات الرقمية": "• الملفات (Files)", "التربية البدنية": "• الخامسة: كرة اليد: دفاع حائط الصد", "التربية الفنية": "• مجال الخزف: هوية الخزف العربية", "التفكير الناقد": "• التفكير الناقد والصورة", "المهارات الحياتية": "• التطبيقات"}}}, "16": {"weekNumber": 16, "weekTitle": "الأسبوع السادس عشر (16)", "stage": "المرحلة المتوسطة", "grades": {"1م": {"الدراسات الإسلامية": "• الفقه (شروط الصلاة وأركانها وواجباتها): واجبات الصلاة\n• القرآن الكريم: مراجعة سور القران الكريم\n• الحديث (الصحبة وحسن الخلق): عظم أجر حسن الخلق\n• التوحيد (الشرك): حماية النبي ﷺ للتوحيد وسده الطرق الموصلة للشرك", "لغتي": "• الرسم الإملائي (رسم التاء المفتوحة والتاء المربوطة)\n• النص الشعري (من أجل عينيك يا وطني)\n• النص الإثرائي (الدرعية)", "الاجتماعيات": "• حجة الوداع ووفاة النبي صلى الله عليه وسلم\n• مراجعة", "الرياضيات": "• مقياس الرسم\n• مراجعة\n• الكسور والنسب المئوية", "العلوم": "• التجوية والتعرية وأثرهما\n• مراجعة", "اللغة الإنجليزية": "• Reading\n• مراجعة\n• Writing +Project+ Form, Meaning and  Function", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة", "التربية البدنية": "• الخامسة: كرة اليد: تقويم مخرجات الوحدة", "التربية الفنية": "• مجال أشغال المعادن: مجسمات جمالية\n• مراجعة", "المهارات الحياتية": "• التطبيقات\n• مراجعة"}, "2م": {"الدراسات الإسلامية": "• الحديث (مكانة العمل في الإسلام): فضل الصبر عن المسألة\n• القرآن الكريم: مراجعة سور القران الكريم - وتثبيت الحفظ\n• التفسير (سورة المؤمنون): تفسير الآيات (101-111) من سورة المؤمنون\n• التوحيد (عبادات وقع فيها الشرك): الطواف والعكوف", "لغتي": "• استراتيجية مهارة التحدث (إلقاء خطبة محفلية)\n• مراجعة\n• النص الإثرائي (ذات النطاقين)", "الاجتماعيات": "• الاقاليــم الحيويــة\n• مراجعة", "الرياضيات": "• الانسحاب\n• مراجعة\n• الدوران", "العلوم": "• جهازا التنفس والإخراج\n• مراجعة", "اللغة الإنجليزية": "• Reading\n• مراجعة\n• Writing + Project +Form, Meaning and Function", "المهارات الرقمية": "• مشروع الوحدة\n• مراجعة\n• اختبر نفسك", "التربية البدنية": "• تطبيقات الأداء (جملة حركية) وتعزيز نواتج التعلم (جمباز فني).", "التربية الفنية": "• مجال الخزف: تزجيج الأواني الفخارية", "المهارات الحياتية": "• التطبيقات\n• مراجعة"}, "3م": {"الدراسات الإسلامية": "• التوحيد (الأيمان): الحنث في اليمين\n• القرآن الكريم: مراجعة سور القران الكريم\n• التفسير (تفسير سورة الكهف): تفسير الآيات (107-110) من سورة الكهف\n• التنجيم: الاستسقاء بالأنواء", "لغتي": "• إستراتيجية مهارة التحدث (التحاور مع المجموعة)\n• مراجعة\n• النص الإثرائي (2) الأمن في أوسع معانيه", "الاجتماعيات": "• نظام المناطق\n• مراجعة", "الرياضيات": "• تطبيقات على النظام المكون من معادلتين خطيتين\n• مراجعة", "العلوم": "• العناصر الانتقالية\n• مراجعة", "اللغة الإنجليزية": "• Writing\n• مراجعة\n• Form, Meaning and Function", "المهارات الرقمية": "• مشروع الوحدة\n• مراجعة\n• اختبر نفسك", "التربية البدنية": "• الخامسة: كرة اليد: التصويبة السلمية من الوثب\n• مراجعة", "التربية الفنية": "• مجال الخزف: هوية الخزف العربية\n• مراجعة", "التفكير الناقد": "• التفكير الناقد والصورة\n• مراجعة", "المهارات الحياتية": "• التطبيقات\n• مراجعة"}}}, "17": {"weekNumber": 17, "weekTitle": "الأسبوع السابع عشر (17)", "stage": "المرحلة المتوسطة", "grades": {"1م": {"الدراسات الإسلامية": "• التوحيد (الشرك): حماية النبي ﷺ للتوحيد وسده الطرق الموصلة للشرك\n• مراجعة عامة", "لغتي": "• النص الإثرائي (الدرعية)\n• مراجعة عامة", "الاجتماعيات": "• حجة الوداع ووفاة النبي صلى الله عليه وسلم\n• مراجعة عامة", "الرياضيات": "• الكسور والنسب المئوية\n• مراجعة عامة", "العلوم": "• التجوية والتعرية وأثرهما\n• مراجعة عامة", "اللغة الإنجليزية": "• Writing +Project+ Form, Meaning and  Function\n• مراجعة عامة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الخامسة: كرة اليد: تقويم مخرجات الوحدة\n• مراجعة عامة", "التربية الفنية": "• مجال أشغال المعادن: مجسمات جمالية\n• مراجعة عامة", "المهارات الحياتية": "• التطبيقات\n• مراجعة عامة"}, "2م": {"الدراسات الإسلامية": "• التوحيد (عبادات وقع فيها الشرك): الطواف والعكوف\n• مراجعة عامة", "لغتي": "• النص الإثرائي (ذات النطاقين)\n• مراجعة عامة", "الاجتماعيات": "• الاقاليــم الحيويــة\n• مراجعة عامة", "الرياضيات": "• الدوران\n• مراجعة عامة", "العلوم": "• جهازا التنفس والإخراج\n• مراجعة عامة", "اللغة الإنجليزية": "• Writing + Project +Form, Meaning and Function\n• مراجعة عامة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الشقلبة الأمامية على اليدين بالارتقاء المفرد\n• مراجعة عامة وتطبيقات عملية لجميع الوحدات المهارية السابقة", "التربية الفنية": "• مجال الخزف: تزجيج الأواني الفخارية\n• مراجعة عامة", "المهارات الحياتية": "• التطبيقات\n• مراجعة عامة"}, "3م": {"الدراسات الإسلامية": "• التفسير (تفسير سورة الكهف): تفسير الآيات (107-110) من سورة الكهف\n• مراجعة عامة", "لغتي": "• النص الإثرائي (2) الأمن في أوسع معانيه\n• مراجعة عامة", "الاجتماعيات": "• نظام المناطق\n• مراجعة عامة", "الرياضيات": "• تطبيقات على النظام المكون من معادلتين خطيتين\n• مراجعة عامة", "العلوم": "• العناصر الانتقالية\n• مراجعة عامة", "اللغة الإنجليزية": "• Form, Meaning and Function\n• مراجعة عامة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الخامسة: كرة اليد: التصويبة السلمية من الوثب\n• مراجعة عامة", "التربية الفنية": "• مجال الخزف: هوية الخزف العربية\n• مراجعة عامة", "التفكير الناقد": "• التفكير الناقد والصورة\n• مراجعة عامة", "المهارات الحياتية": "• التطبيقات\n• مراجعة عامة"}}}, "18": {"weekNumber": 18, "weekTitle": "الأسبوع الثامن عشر (18)", "stage": "المرحلة المتوسطة", "grades": {"1م": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}, "2م": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية وتقويم نهائي ورصد درجات أعمال السنة.", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}, "3م": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التفكير الناقد": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}}}};
+        const ELEM_DATA = {"14": {"weekNumber": 14, "weekTitle": "الأسبوع الرابع عشر (14)", "stage": "المرحلة الابتدائية", "grades": {"4ب": {"الدراسات الإسلامية": "• التوحيد (العبادة): شروط قبول العبادة\n• القرآن الكريم: تلاوة سورة الذاريات من (15) إلى (40) حفظ سورة المزمل الآية (20)\n• الحديث (هدي النبي ﷺ في منزله): معاملة النبي ﷺ لأزواجه", "لغتي": "• التواصل الشفهي (وصف مشاهدات)\n• التواصل الشفهي (تمثيل حوار)", "الاجتماعيات": "• مفهوم الاقتصاد", "الرياضيات": "• التهيئة\n• الضرب في مضاعفات العشرة\n• تقدير نواتج الضرب", "العلوم": "• المحافظة على الصحة", "اللغة الإنجليزية": "• Vocabulary, Grammar", "المهارات الرقمية": "• التكرارات في سكراتش (Scratch)\n• الرسم بواسطة سكراتش", "التربية البدنية": "• التايكوندو: الوقفات / )وقفة المشي( /\"أب - سوجي\"\n• الوقفات / )وقفة الطعن األمامية( 1", "التربية الفنية": "• مجال الخزف: تشكيل أواني بطريقة الحبال", "المهارات الحياتية": "• الجوارب والحذاء\n• مراجعة"}, "5ب": {"الدراسات الإسلامية": "• التوحيد (العبادة): الخشوع والإنابة\n• القرآن الكريم: تلاوة سورة فصلت من (44) إلى (54) حفظ سورة المعارج من(43) إلى (44)\n• مكانة المسجد عند النبي ﷺ\n• الفقه (سنن الصلاة ومكروهاتها): سنن الصلاة", "لغتي": "• التواصل الكتابي (تصميم إعلان: إخباري – تجاري)", "الاجتماعيات": "• الأودية", "الرياضيات": "• التهيئة\n• القسمة والكسور الاعتيادية\n• استكشاف: تمثيل الأعداد الكسرية والكسور غير الفعلية بالنماذج\n• الكسور غير الفعلية", "العلوم": "• مصادر الطاقة", "اللغة الإنجليزية": "• Story, Listening and Speaking\n• Vocabulary, Grammar", "المهارات الرقمية": "• رسائل البث", "التربية البدنية": "• الوقفات / )وقفة المشي( /\"أب - سوجي\"\n• الوقفات / )وقفة الطعن الأمامية(", "التربية الفنية": "• مجال الخزف: زخارف بارزة على المسطحات الطينية", "المهارات الحياتية": "• العناصر الغذائية"}, "6ب": {"الدراسات الإسلامية": "• التوحيد (البدع والذنوب والمعاصي): الذنوب و المعاصي\n• القرآن الكريم: تلاوة سورة فاطر من (19) إلى (35) حفظ سورة القلم من(50) إلى (52)\n• الحديث (هدي النبي ﷺ مع غير المسلمين): هدي النبي ﷺ في التعامل مع غير المسلمين", "لغتي": "• التواصل الشفهي (عرض شفهي لسيرة غيرية)", "الاجتماعيات": "• توحيد المملكة العربية السعودية", "الرياضيات": "• التهيئة\n• استكشاف: النظام المتري", "العلوم": "• التربة", "اللغة الإنجليزية": "• Week 14 – Unit 4: Professions   – What Do You Want to Be?\n• Reading, Word Work and Writing", "المهارات الرقمية": "• القرارات المركبة في سكراتش", "التربية البدنية": "• الوقفات / )وقفة المشي( /\"أب - سوجي\"\n• الوقفات / )وقفة الطعن الأمامية(", "التربية الفنية": "• مجال الخزف: تشكيل آنية خزفية منتظمة الشكل\n• مجال الخزف: تكوينات زخرفية غائرة على سطح الطينة المتجلدة", "المهارات الحياتية": "• القهوة"}}}, "15": {"weekNumber": 15, "weekTitle": "الأسبوع الخامس عشر (15)", "stage": "المرحلة الابتدائية", "grades": {"4ب": {"الدراسات الإسلامية": "• الحديث (هدي النبي ﷺ في منزله): حسن تعامله ﷺ مع أهله\n• القرآن الكريم: تلاوة سورة الذاريات من (41) إلى (60)\n• المسح على الخفين والجوربين: الخف والجورب", "لغتي": "• التواصل الشفهي (التعبير عما تقتضيه مواقف مختلفة وصياغة أسئلة)\n• التواصل الكتابي (كتابة قصة من مشاهد معروضة)", "الاجتماعيات": "• التبادل التجاري", "الرياضيات": "• خطة حل المسألة\n• استكشاف: ضرب عدد من رقمين في عدد من رقمين", "العلوم": "• الغذاء والتغذية", "اللغة الإنجليزية": "• Reading, Word Work and Writing", "المهارات الرقمية": "• مشروع الوحدة", "التربية البدنية": "• التايكوندو: المهارات الهجومية من الحركة /)اللكمة الأمامية المستقيمة(/\"أوجلل\n• - جريوجي\" /\"مومتونج - جريوجي\n• المهارات الهجومية من الحركة)الركلة الأمامية( / \"آب - تشاجي\"", "التربية الفنية": "• مجال الخزف: تشكيلات مبتكرة بطريقة الحبال", "المهارات الحياتية": "• الخضروات"}, "5ب": {"الدراسات الإسلامية": "• التوحيد (العبادة): الذبح لله\n• مكانة المسجد عند النبي ﷺ: فضل بناء المساجد\n• الفقه (سنن الصلاة ومكروهاتها): مكروهات الصلاة", "لغتي": "• التواصل الشفهي (سرد القصة)", "الاجتماعيات": "• المناطق الساحلية والجزر", "الرياضيات": "• خطة حل المسالة التمثيل باشكال فن\n• الأعداد الكسرية\n• مقارنة الكسور الاعتيادية والأعداد الكسرية", "العلوم": "• الهواء والماء", "اللغة الإنجليزية": "• Reading, Word Work and Writing\n• Integrated Learning: Natural Science", "المهارات الرقمية": "• الاستشعار\n• مشروع الوحدة", "التربية البدنية": "• المهارات الهجومية من الحركة /)اللكمة الأمامية المستقيمة(/\"أوجلل -جريوجي\"\n• /\"مومتونج - جيروجي---\n• المهارات الهجومية من الحركة)الركلة الأمامية( / \"آب - تشاجي\"", "التربية الفنية": "• مجال الخزف: تشكيل المجسم بطريقة الشرائح الطينية", "المهارات الحياتية": "• البيض"}, "6ب": {"الدراسات الإسلامية": "• الحديث (هدي النبي ﷺ مع غير المسلمين): صلة الوالدين غير المسلمين\n• الفقه: الصلاة على الميت", "لغتي": "• التواصل الشفهي: تقديم عرض شفهي عن كتاب أو قصة\n• التواصل الشفهي (إجراء مقابلة شفهية)", "الاجتماعيات": "• ملوك المملكة العربية السعودية (الملك سعود - الملك فيصل )", "الرياضيات": "• الطول في النظام المتري\n• الكتلة والسعة في النظام المتري", "العلوم": "• حماية الموارد", "اللغة الإنجليزية": "• Week 15 – Unit 4: Professions   – A Day with a Doctor\n• Integrated Learning: Natural Science", "المهارات الرقمية": "• الألعاب في سكراتش", "التربية البدنية": "• المهارات الهجومية من الحركة /)اللكمة الأمامية المستقيمة(/\"أوجلل - جريوجي\"\n• /\"مومتونج - جريوجي\n• المهارات الهجومية من الحركة)الركلة الأمامية( / \"آب - تشاجي", "التربية الفنية": "• مجال الخزف: تكوينات زخرفية غائرة على سطح الطينة المتجلدة", "المهارات الحياتية": "• التمر"}}}, "16": {"weekNumber": 16, "weekTitle": "الأسبوع السادس عشر (16)", "stage": "المرحلة الابتدائية", "grades": {"4ب": {"الدراسات الإسلامية": "• الحديث (هدي النبي ﷺ في منزله): حسن تعامله ﷺ مع القائمين على قضاء حوائجه\n• القرآن الكريم: مراجعة سور القران الكريم\n• المسح على الخفين والجوربين: مدة المسح", "لغتي": "• التواصل اللغوي (أتواصل كتابيًا (كتابة قصة)\n• مراجعة", "الاجتماعيات": "• التبادل التجاري\n• مراجعة", "الرياضيات": "• ضرب عدد من رقمين في عدد من رقمين\n• مراجعة\n• ضرب عدد من ثلاثة أرقام في عدد من رقمين", "العلوم": "• الغذاء والتغذية\n• مراجعة", "اللغة الإنجليزية": "• Integrated Learning: Social Studies\n• مراجعة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة", "التربية البدنية": "• التايكوندو:  تطبيقات الأداء \"جملة حركية\" )تعزيز نواتج التعلم", "التربية الفنية": "• مجال الخزف: تشكيلات مبتكرة بطريقة الحبال\n• مراجعة", "المهارات الحياتية": "• الفواكه\n• مراجعة"}, "5ب": {"الدراسات الإسلامية": "• مكانة المسجد عند النبي ﷺ: تحية المسجد\n• القرآن الكريم: مراجعة سور القران الكريم\n• الفقه (سنن الصلاة ومكروهاتها): الخشوع في الصلاة", "لغتي": "• التواصل الشفهي (تقديم عرض شفهي عن مشكلة بيئية)\n• مراجعة", "الاجتماعيات": "• المناطق الإدارية\n• مراجعة", "الرياضيات": "• تقريب الكسور\n• مراجعة\n• استقصاء حل المسالة", "العلوم": "• الهواء والماء\n• مراجعة", "اللغة الإنجليزية": "• Integrated Learning: Natural Science\n• مراجعة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة", "التربية البدنية": "• الوثب العالي بالطريقة السرجية\n• مراجعة وتطبيقات الأداء (جملة حركية)", "التربية الفنية": "• مجال الخزف: تشكيل المجسم بطريقة الشرائح الطينية", "المهارات الحياتية": "• البيض\n• مراجعة"}, "6ب": {"الدراسات الإسلامية": "• منهج المسلم في الاعتقاد: منهج أهل السنة والجماعة في العقيدة\n• القرآن الكريم: مراجعة سور القران الكريم\n• الحديث (هدي النبي ﷺ في التعامل مع الحيوان): إحسان النبي ﷺ إلى الحيوان", "لغتي": "• التواصل الشفهي (إجراء مقابلة شفهية)\n• مراجعة", "الاجتماعيات": "• ملوك المملكة العربية السعودية (الملك خالد - الملك فهد - الملك عبدالله )", "الرياضيات": "• مهارة حل المسألة: استعمال مقياس مرجعي\n• مراجعة\n• التحويل بين الوحدات في النظام المتري", "العلوم": "• حماية الموارد", "اللغة الإنجليزية": "• Week 16 – Unit 4: Professions   – The Firefighter\n• Integrated Learning: Natural Science", "المهارات الرقمية": "• مشروع الوحدة\n• اختبر نفسك", "التربية البدنية": "• تطبيقات الأداء \"جملة حركية\" )تعزيز نواتج التعلم", "التربية الفنية": "• مجال الخزف: تكوينات زخرفية غائرة على سطح الطينة المتجلدة\n• مراجعة", "المهارات الحياتية": "• التمر\n• مراجعة"}}}, "17": {"weekNumber": 17, "weekTitle": "الأسبوع السابع عشر (17)", "stage": "المرحلة الابتدائية", "grades": {"4ب": {"الدراسات الإسلامية": "• الحديث (هدي النبي ﷺ في منزله): حسن تعامله ﷺ مع القائمين على قضاء حوائجه\n• مراجعة عامة", "لغتي": "• التواصل اللغوي (أتواصل كتابيًا (كتابة قصة)\n• مراجعة عامة", "الاجتماعيات": "• التبادل التجاري\n• مراجعة عامة", "الرياضيات": "• ضرب عدد من ثلاثة أرقام في عدد من رقمين\n• مراجعة عامة", "العلوم": "• الغذاء والتغذية\n• مراجعة عامة", "اللغة الإنجليزية": "• Integrated Learning: Social Studies\n• مراجعة عامة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الوثب الطويل بطريقة القرفصاء\n• مراجعة عامة", "التربية الفنية": "• مجال الخزف: تشكيلات مبتكرة بطريقة الحبال\n• مراجعة عامة", "المهارات الحياتية": "• الفواكه\n• مراجعة عامة"}, "5ب": {"الدراسات الإسلامية": "• الفقه (سنن الصلاة ومكروهاتها): الخشوع في الصلاة\n• مراجعة عامة", "لغتي": "• التواصل الشفهي (تقديم عرض شفهي عن مشكلة بيئية)\n• مراجعة عامة", "الاجتماعيات": "• المناطق الإدارية\n• مراجعة عامة", "الرياضيات": "• استقصاء حل المسالة\n• مراجعة عامة", "العلوم": "• الهواء والماء\n• مراجعة عامة", "اللغة الإنجليزية": "• Integrated Learning: Natural Science\n• مراجعة عامة", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الوثب العالي بالطريقة السرجية\n• مراجعة عامة", "التربية الفنية": "• مجال الخزف: تشكيل المجسم بطريقة الشرائح الطينية\n• مراجعة عامة", "المهارات الحياتية": "• البيض\n• مراجعة عامة"}, "6ب": {"الدراسات الإسلامية": "• الحديث (هدي النبي ﷺ في التعامل مع الحيوان): إحسان النبي ﷺ إلى الحيوان\n• مراجعة عامة", "لغتي": "• التواصل الشفهي (إجراء مقابلة شفهية)\n• مراجعة عامة", "الاجتماعيات": "• ملوك المملكة العربية السعودية (الملك خالد - الملك فهد - الملك عبدالله )\n• مراجعة عامة", "الرياضيات": "• التحويل بين الوحدات في النظام المتري\n• مراجعة عامة", "العلوم": "• حماية الموارد\n• مراجعة عامة", "اللغة الإنجليزية": "• Week 17 – Unit 4: Professions   – Jobs of the Future", "المهارات الرقمية": "• اختبر نفسك\n• مراجعة عامة", "التربية البدنية": "• الوثب الثلاثي\n• مراجعة عامة", "التربية الفنية": "• مجال الخزف: تكوينات زخرفية غائرة على سطح الطينة المتجلدة\n• مراجعة عامة", "المهارات الحياتية": "• التمر\n• مراجعة عامة"}}}, "18": {"weekNumber": 18, "weekTitle": "الأسبوع الثامن عشر (18)", "stage": "المرحلة الابتدائية", "grades": {"4ب": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}, "5ب": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}, "6ب": {"الدراسات الإسلامية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "لغتي": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الاجتماعيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "الرياضيات": "• مراجعة ختامية واستعداد للاختبارات النهائية", "العلوم": "• مراجعة ختامية واستعداد للاختبارات النهائية", "اللغة الإنجليزية": "• Week 18 – Revision              – A Wonderful Term", "المهارات الرقمية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية البدنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "التربية الفنية": "• مراجعة ختامية واستعداد للاختبارات النهائية", "المهارات الحياتية": "• مراجعة ختامية واستعداد للاختبارات النهائية"}}}};
+        const MOE_LOGO = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDUuMzY1IDEyNS40NjIiIHN0eWxlPSJ2ZXJzaW9uOjEiPgogIDxzd2l0Y2g+CiAgICA8Zm9yZWlnbk9iamVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4PSIwIiB5PSIwIiByZXF1aXJlZEV4dGVuc2lvbnM9Imh0dHA6Ly9ucy5hZG9iZS5jb20vQWRvYmVJbGx1c3RyYXRvci8xMC4wLyIvPgogICAgPGc+CiAgICAgIDxwYXRoIGZpbGw9IiM2NEMzQjYiIGQ9Ik0yNDEuMDIgNDEuMjA1Yy0yLjI4NiAwLjA2My00LjQwNi0xLjk5Mi00LjM0MS00LjM0MSAtMC4wMzItMi4yNDkgMi4wNjEtNC40MDggNC4zNzQtNC4zNzQgMi40MjQgMCA0LjM3NSAyLjAyNCA0LjMxIDQuMzczQzI0NS40MzEgMzkuMjEgMjQzLjMwMyA0MS4yNzEgMjQxLjAyIDQxLjIwNXoiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTIwOC40OTcgNDIuOTU0Yy0xLjYzOC0wLjg3OS0yLjI1OC0yLjkyNC0xLjM3OC00LjU2NWwwIDBjMC44NTUtMS42MTcgMi45MDEtMi4yMzIgNC41NC0xLjM1NGwwIDBjMS42NDEgMC44OCAyLjI2IDIuOTI2IDEuMzc5IDQuNTY0bDAgMGMtMC4xNDIgMC4yODUtMC4zNTYgMC41NDctMC41NyAwLjc2bDAgMEMyMTEuNDIxIDQzLjQwNiAyMDkuODMxIDQzLjY2OCAyMDguNDk3IDQyLjk1NHoiLz4KICAgICAgPHBhdGggZmlsbD0iIzY0QzNCNiIgZD0iTTIyMy4zNDQgNDAuMTM3Yy0xLjgxMy0xLjQwNS0yLjEzNS00LjAxLTAuNzYtNS43OTZsMC4wMjktMC4wMjljMS40MDYtMS43NTUgMy45ODEtMi4xMDYgNS43OTUtMC43MDJsMCAwYzEuODE1IDEuNDAzIDIuMTM2IDQuMDA4IDAuNzMzIDUuODIzbDAgMCAwIDAgMCAwYy0wLjA4OSAwLjE0Ni0wLjIwNiAwLjI2My0wLjMyMyAwLjM4bDAgMEMyMjcuMzU0IDQxLjI3OCAyMjUuMDEyIDQxLjQ1MyAyMjMuMzQ0IDQwLjEzN3oiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOUQ4RSIgZD0iTTE5NC40MDMgNDcuMjFjLTAuNDI5LTAuNDI5LTAuNjk0LTEuMDI0LTAuNjc3LTEuNjM1IDAuMDAxLTIuMDEgMi40OS0zLjE1NSAzLjk3OS0xLjY2NyAwLjQ0NSAwLjQ0NSAwLjY5MiAxLjA1NSAwLjY3NyAxLjY2N0MxOTguNDMyIDQ3LjU1NSAxOTUuOTIyIDQ4LjcyOSAxOTQuNDAzIDQ3LjIxeiIvPgogICAgICA8cGF0aCBmaWxsPSIjNjRDM0I2IiBkPSJNODkuMjExIDQwLjI3MWMyLjg3My0yLjg3MyAwLjU5Mi03LjUyMy0zLjA0OC03LjQyMiAtMi4yNDktMC4wMzItNC40MDcgMi4wNjEtNC4zNzQgNC4zNzQgMCAyLjQyNCAyLjAyNCA0LjM3NSA0LjM3MyA0LjMxQzg3LjMwMiA0MS41NjYgODguNDEgNDEuMDcyIDg5LjIxMSA0MC4yNzF6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwOEIwQTIiIGQ9Ik0xMTkuNDkxIDQyLjc0NEwxMTkuNDkxIDQyLjc0NGMtMC4yMTQgMC4yMTQtMC40NzUgMC40MjgtMC43NiAwLjU3bDAgMGMtMS42MzggMC44ODEtMy42ODQgMC4yNjItNC41NjQtMS4zNzlsMCAwYy0wLjg3OC0xLjYzOS0wLjI2Mi0zLjY4NCAxLjM1NC00LjU0bDAgMGMxLjY0MS0wLjg4IDMuNjg2LTAuMjYgNC41NjUgMS4zNzhDMTIwLjggNDAuMTA3IDEyMC41MzggNDEuNjk3IDExOS40OTEgNDIuNzQ0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjNjRDM0I2IiBkPSJNMTA0LjczNSA0MC4xNzVMMTA0LjczNSA0MC4xNzVjLTAuMTE3IDAuMTE3LTAuMjM0IDAuMjM0LTAuMzggMC4zMjNsMCAwIDAgMCAwIDBjLTEuODE1IDEuNDAzLTQuNDIgMS4wODItNS44MjMtMC43MzNsMCAwYy0xLjQwNS0xLjgxMy0xLjA1My00LjM4OSAwLjcwMi01Ljc5NWwwLjAyOS0wLjAyOWMxLjc4Ni0xLjM3NSA0LjM5MS0xLjA1MyA1Ljc5NiAwLjc2QzEwNi4zNzQgMzYuMzY5IDEwNi4xOTkgMzguNzEyIDEwNC43MzUgNDAuMTc1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTk3LjI5NCAzMS44MDVjLTEuNzEtMC43Ni0yLjQ3MS0yLjc1Ny0xLjczNC00LjQ0NWwwIDBjMC43MzYtMS42ODggMi43MDktMi40NzIgNC40Mi0xLjc2bDAgMGMxLjcxMyAwLjc2MSAyLjQ3MyAyLjc1OSAxLjczOCA0LjQ0N2wwIDAgMCAwIDAgMGMtMC4xNjcgMC40MDQtMC40MDYgMC43MzYtMC43MTUgMS4wNDVsMCAwQzIwMC4wNzQgMzIuMDE5IDE5OC42MDMgMzIuMzUzIDE5Ny4yOTQgMzEuODA1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDhCMEEyIiBkPSJNMjM1Ljk5MiA5LjM3NWMtMS4wNTItMS4wNTItMS42NzMtMi40NTItMS42MzMtMy44OSAtMC4wNC0yLjgzOSAyLjYwNi01LjQ4NSA1LjQ4My01LjQ4MyAyLjk0Ny0wLjA4MiA1LjUxOSAyLjMzMSA1LjUyMyA1LjUyM0MyNDUuMzY1IDEwLjM1OCAyMzkuNDUyIDEyLjgzNSAyMzUuOTkyIDkuMzc1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA4RjgwIiBkPSJNMTcyLjExNSAyNC40TDE3Mi4xMTUgMjQuNGMwLjM1NC0xLjQ5NiAxLjgzMS0yLjQxOSAzLjM0NS0yLjA4NWwwIDBjMS40NzQgMC4zNzQgMi40MTkgMS44NjkgMi4wNjUgMy4zNjRsMCAwYy0wLjExOSAwLjUxMS0wLjM5MyAwLjk4NS0wLjcyNyAxLjMxOWwwIDBDMTc0Ljc3NyAyOS4wMTkgMTcxLjQ3NiAyNy4xMDUgMTcyLjExNSAyNC40eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTg1LjcxMyAyMS4wODhjLTEuNzItMC42MDUtMi42MDMtMi41MS0xLjk3Ni00LjIwOGwwIDBjMC42MjktMS42OTYgMi41MzUtMi41OCA0LjIzMi0xLjk1M2wwIDBjMS42NzQgMC42MDUgMi41OCAyLjQ4NyAxLjk1NCA0LjE4NWwwIDBjMCAwIDAgMCAwLjAyMyAwLjAyM2wwIDBjLTAuMTg2IDAuNDYzLTAuNDQyIDAuODU5LTAuNzY3IDEuMTg1bDAgMEMxODguMjk0IDIxLjIwNCAxODYuOTQ3IDIxLjUyOSAxODUuNzEzIDIxLjA4OHoiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOUQ4RSIgZD0iTTE5Ny42MDYgMTYuNzkzYy0yLjExNS0xLjAyNi0yLjk2Mi0zLjYyNi0xLjkwNC01LjcxMWwwIDBjMS4wODgtMi4xMTUgMy42MjctMi45NiA1Ljc3Mi0xLjkwNWwwIDBjMi4wODcgMS4wNiAyLjkzNCAzLjY2IDEuODc2IDUuNzQ1bDAgMGMtMC4yNDMgMC40MjEtMC40ODQgMC43ODUtMC43ODcgMS4wODhsMCAwQzIwMS4yOTQgMTcuMjc5IDE5OS4yNjggMTcuNjcgMTk3LjYwNiAxNi43OTN6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDlEOEUiIGQ9Ik0yMDkuOTg1IDEzLjY3MWMtMi4zLTEuNTE5LTIuOTM3LTQuNjMyLTEuNDE3LTYuOTMybDAgMGMxLjUyMy0yLjI5NiA0LjYzMi0yLjkzNCA2LjkzMi0xLjQxNGwwIDBjMi4yOTYgMS41OTIgMi45MDEgNC42NjkgMS4zNzggNi45NjVsMCAwYy0wLjE0IDAuMjg1LTAuMzg5IDAuNTMzLTAuNTk5IDAuNzQ0bDAgMEMyMTQuNjE2IDE0LjY5NyAyMTEuOTk4IDE1LjA0OSAyMDkuOTg1IDEzLjY3MXoiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTIyMi45ODQgMTAuODE3Yy0yLjA4OS0xLjgwNi0yLjMzNC00Ljk1Mi0wLjUzMi03LjAzOGwwIDBjMS43Ny0yLjEyMiA0LjkxNy0yLjM2OSA3LjAzOC0wLjYwMWwwIDBjMi4wODYgMS44MDMgMi4zMzEgNC45NDggMC41NjYgNy4wNzJsMCAwIDAgMCAwIDBjLTAuMTA1IDAuMTA1LTAuMTc2IDAuMTc2LTAuMjgzIDAuMjgzbDAgMEMyMjcuOTM0IDEyLjM3MiAyMjUuMDMzIDEyLjUxIDIyMi45ODQgMTAuODE3eiIvPgogICAgICA8cGF0aCBmaWxsPSIjNjRDM0I2IiBkPSJNMjQwLjUzOCAyNi42MTRjLTIuNzA0LTAuMDA0LTQuODI0LTIuMjI0LTQuODI3LTQuODI3IC0wLjAzNS0yLjU2NiAyLjMyNy00Ljg2IDQuODYtNC44NiAyLjYwMyAwIDQuODY3IDIuMTYxIDQuNzkyIDQuODYyQzI0NS40MzEgMjQuMzczIDI0My4zNiAyNi42MSAyNDAuNTM4IDI2LjYxNHoiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOEY4MCIgZD0iTTE3MS42NzYgNDIuMDU0TDE3MS42NzYgNDIuMDU0YzAuMTgyLTEuNDE2IDEuNDg5LTIuMzk3IDIuODg4LTIuMTk2bDAgMGMxLjM5NyAwLjE5OSAyLjM5NiAxLjQ4OCAyLjE5NiAyLjg4NmwwIDBjLTAuMDcyIDAuNTgzLTAuMzI3IDEuMDktMC43MDggMS40NzFsMCAwQzE3NC4zMjMgNDUuOTQ0IDE3MS4zMjggNDQuNDkzIDE3MS42NzYgNDIuMDU0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTgyLjk5MSAzMy44NzVMMTgyLjk5MSAzMy44NzVjMC40NTYtMS42MzUgMi4xNTYtMi41OTQgMy44MTItMi4xMTRsMCAwYzEuNjMzIDAuNDU2IDIuNTkzIDIuMTU3IDIuMTM3IDMuNzkybDAgMGMtMC4xNzQgMC41MjQtMC40MzcgMC45NTctMC44MDggMS4zMjdsMCAwQzE4NS44OTQgMzkuMTE4IDE4Mi4xNDIgMzYuOSAxODIuOTkxIDMzLjg3NXoiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTIwOS44OTkgMjcuOTQ3Yy0xLjg4My0xLjE5OC0yLjQ4Mi0zLjY4LTEuMzEyLTUuNTkxbDAgMGMxLjE2OS0xLjg1NCAzLjY1MS0yLjQ1MyA1LjUzNC0xLjMxMWwwIDBjMS45MTIgMS4xNjkgMi41MTEgMy42NTEgMS4zNDEgNS41NjJsMCAwYy0wLjE3IDAuMjg3LTAuMzcgMC41NDMtMC41NyAwLjc0MmwwIDBDMjEzLjU4IDI4LjY2MiAyMTEuNTI1IDI4Ljk0NiAyMDkuODk5IDI3Ljk0N3oiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTIyMy4xMDYgMjUuNTU3Yy0xLjg1LTEuNTQzLTIuMTI2LTQuMjgzLTAuNjE4LTYuMTYzbDAgMGMxLjU0Mi0xLjg0OSA0LjI4NC0yLjEyNCA2LjEzMy0wLjU4NWwwIDBjMS44NzkgMS41MDkgMi4xNTYgNC4yNTMgMC42MTUgNi4xbDAgMGMwIDAgMCAwIDAuMDMgMC4wM2wwIDBjLTAuMTIzIDAuMTIzLTAuMjE1IDAuMjE1LTAuMzA4IDAuMzA4bDAgMEMyMjcuMzg3IDI2LjgxNyAyMjQuODMxIDI2Ljk3MiAyMjMuMTA2IDI1LjU1N3oiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTkxLjE2MyAxLjYzNWMtMS4wNTItMS4wNTItMi40NTItMS42NzMtMy44OS0xLjYzMyAtMi44MzktMC4wNC01LjQ4NSAyLjYwNi01LjQ4MyA1LjQ4MyAtMC4wODIgMi45NDkgMi4zMzMgNS41MTkgNS41MjMgNS41MjNDOTAuNDA2IDExLjAwOCA5NC41NzUgNS4wNDcgOTEuMTYzIDEuNjM1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA4RjgwIiBkPSJNMTU0LjMzNSAyNy4zODVMMTU0LjMzNSAyNy4zODVjLTAuMzM0IDAuMzM0LTAuODA4IDAuNjA4LTEuMzE5IDAuNzI3bDAgMGMtMS40OTUgMC4zNTQtMi45OS0wLjU5MS0zLjM2NC0yLjA2NWwwIDBjLTAuMzMzLTEuNTE1IDAuNTktMi45OTEgMi4wODUtMy4zNDZsMCAwQzE1NC40MzYgMjIuMDY0IDE1Ni4zNjQgMjUuMzU3IDE1NC4zMzUgMjcuMzg1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTQyLjY3MiAyMC43MTRMMTQyLjY3MiAyMC43MTRjLTAuMzI2IDAuMzI2LTAuNzIyIDAuNTgxLTEuMTg1IDAuNzY3bDAgMGMtMC4wMjMtMC4wMjMtMC4wMjMtMC4wMjMtMC4wMjMtMC4wMjNsMCAwYy0xLjY5OCAwLjYyNy0zLjU4LTAuMjc5LTQuMTg1LTEuOTU0bDAgMGMtMC42MjgtMS42OTcgMC4yNTctMy42MDMgMS45NTItNC4yMzJsMCAwYzEuNjk4LTAuNjI3IDMuNjAzIDAuMjU3IDQuMjA4IDEuOTc2QzE0My44ODEgMTguNDg0IDE0My41NTUgMTkuODMxIDE0Mi42NzIgMjAuNzE0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTMwLjY3OCAxNi4zODRMMTMwLjY3OCAxNi4zODRjLTAuMzAzIDAuMzAyLTAuNjY3IDAuNTQzLTEuMDg4IDAuNzg2bDAgMGMtMi4wODUgMS4wNTgtNC42ODUgMC4yMTEtNS43NDUtMS44NzZsMCAwYy0xLjA1NS0yLjE0NC0wLjIwOS00LjY4NCAxLjkwNS01Ljc3MmwwIDBjMi4wODUtMS4wNTggNC42ODUtMC4yMTEgNS43MTEgMS45MDRDMTMyLjMzOCAxMy4wODggMTMxLjk0NyAxNS4xMTQgMTMwLjY3OCAxNi4zODR6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDlEOEUiIGQ9Ik0xMTcuOTkzIDEzLjQwNkwxMTcuOTkzIDEzLjQwNmMtMC4yMTEgMC4yMTEtMC40NTkgMC40NTktMC43NDQgMC41OTlsMCAwYy0yLjI5NiAxLjUyMy01LjM3MyAwLjkxOS02Ljk2NS0xLjM3OGwwIDBjLTEuNTE5LTIuMy0wLjg4Mi01LjQwOSAxLjQxNC02LjkzMmwwIDBjMi4zLTEuNTE5IDUuNDEzLTAuODgyIDYuOTMyIDEuNDE4QzEyMC4wMDggOS4xMjYgMTE5LjY1NSAxMS43NDQgMTE3Ljk5MyAxMy40MDZ6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwOEIwQTIiIGQ9Ik0xMDQuNDc2IDExLjA5MUwxMDQuNDc2IDExLjA5MWMtMC4xMDcgMC4xMDctMC4xNzggMC4xNzgtMC4yODMgMC4yODNsMCAwIDAgMCAwIDBjLTIuMTI0IDEuNzY1LTUuMjcgMS41MTktNy4wNzItMC41NjZsMCAwQzk1LjM1MyA4LjY4OCA5NS42IDUuNTQgOTcuNzIyIDMuNzdsMCAwYzIuMDg2LTEuODAyIDUuMjMyLTEuNTU3IDcuMDM4IDAuNTMyQzEwNi40NTMgNi4zNTIgMTA2LjMxNSA5LjI1MiAxMDQuNDc2IDExLjA5MXoiLz4KICAgICAgPHBhdGggZmlsbD0iIzY0QzNCNiIgZD0iTTkwLjA3MiAxOC43MjRjLTAuOTIzLTAuOTIzLTIuMTIxLTEuNDM2LTMuNDIzLTEuNDM3IC0yLjU2Ni0wLjAzNS00Ljg2IDIuMzI2LTQuODYgNC44NiAwIDIuNjEgMi4xNjcgNC44NjcgNC44NjIgNC43OTJDOTAuOTU3IDI3LjA1MyA5My4wNyAyMS43MjMgOTAuMDcyIDE4LjcyNHoiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOEY4MCIgZD0iTTE1NC43OSA0NC42MDFMMTU0Ljc5IDQ0LjYwMWMtMC4zODEgMC4zODEtMC44ODggMC42MzctMS40NzEgMC43MDhsMCAwYy0xLjM5OCAwLjItMi42ODctMC43OTktMi44ODYtMi4xOTZsMCAwYy0wLjItMS4zOTkgMC43OC0yLjcwNiAyLjE5Ni0yLjg4OGwwIDBDMTU1LjA3IDM5Ljg3NyAxNTYuNTE3IDQyLjg3MyAxNTQuNzkgNDQuNjAxeiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTQzLjQxNiAzNy4yNDFMMTQzLjQxNiAzNy4yNDFjLTAuMzcgMC4zNy0wLjgwMyAwLjYzMy0xLjMyNyAwLjgwOGwwIDBjLTEuNjM1IDAuNDU2LTMuMzM2LTAuNTAzLTMuNzkyLTIuMTM2bDAgMGMtMC40OC0xLjY1NyAwLjQ3OS0zLjM1NiAyLjExNC0zLjgxMmwwIDBDMTQzLjQzNCAzMS4yNTEgMTQ1LjY1NSAzNS4wMDEgMTQzLjQxNiAzNy4yNDF6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDlEOEUiIGQ9Ik0xMzAuOTQ2IDMxLjQyOEwxMzAuOTQ2IDMxLjQyOGMtMC4zMDkgMC4zMDktMC42NDEgMC41NDgtMS4wNDUgMC43MTVsMCAwIDAgMCAwIDBjLTEuNjg4IDAuNzM2LTMuNjg1LTAuMDI0LTQuNDQ3LTEuNzM3bDAgMGMtMC43MTMtMS43MTEgMC4wNzItMy42ODQgMS43Ni00LjQybDAgMGMxLjY4OS0wLjczNyAzLjY4NSAwLjAyNCA0LjQ0NSAxLjczNEMxMzIuMjA4IDI5LjAyOSAxMzEuODc0IDMwLjUgMTMwLjk0NiAzMS40Mjh6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwOEIwQTIiIGQ9Ik0xMTguMDI0IDI3LjcyOEwxMTguMDI0IDI3LjcyOGMtMC4xOTkgMC4xOTktMC40NTUgMC40LTAuNzQyIDAuNTdsMCAwYy0xLjkxMSAxLjE3LTQuMzkzIDAuNTcxLTUuNTYyLTEuMzQxbDAgMGMtMS4xNDItMS44ODMtMC41NDMtNC4zNjUgMS4zMTEtNS41MzRsMCAwYzEuOTExLTEuMTcgNC4zOTMtMC41NzEgNS41OTEgMS4zMTJDMTE5LjYyMSAyNC4zNiAxMTkuMzM3IDI2LjQxNiAxMTguMDI0IDI3LjcyOHoiLz4KICAgICAgPHBhdGggZmlsbD0iIzA4QjBBMiIgZD0iTTEwNC4wMjQgMjUuNjMyTDEwNC4wMjQgMjUuNjMyYy0wLjA5MyAwLjA5My0wLjE4NSAwLjE4NS0wLjMwOCAwLjMwOGwwIDBjLTAuMDMtMC4wMy0wLjAzLTAuMDMtMC4wMy0wLjAzbDAgMGMtMS44NDcgMS41NC00LjU5MSAxLjI2NC02LjEtMC42MTVsMCAwYy0xLjUzOS0xLjg0OS0xLjI2NC00LjU5MSAwLjU4NS02LjEzM2wwIDBjMS44OC0xLjUwNyA0LjYyLTEuMjMyIDYuMTYzIDAuNjE4QzEwNS43NDkgMjEuNTA2IDEwNS41OTQgMjQuMDYxIDEwNC4wMjQgMjUuNjMyeiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTMzLjQ2NSA0NS45MTljLTAuMDAyLTEuMjk0LTEuMTAzLTIuMzYyLTIuMzI4LTIuMzI4IC0yLjAxIDAuMDAxLTMuMTU1IDIuNDktMS42NjcgMy45NzkgMC40NDUgMC40NDUgMS4wNTUgMC42OTIgMS42NjcgMC42NzdDMTMyLjMyIDQ4LjI3NyAxMzMuNDYzIDQ3LjI2MiAxMzMuNDY1IDQ1LjkxOXoiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOEY4MCIgZD0iTTE2My41MTEgMzYuMDIxYy0xLjUzOSAwLjAwMi0yLjYxNi0xLjIyOC0yLjU4Mi0yLjU4MiAtMC4wMDEtMi4xNTMgMi43MTUtMy41MDkgNC40MTItMS44MTJDMTY2LjkwNSAzMy4xOTEgMTY1LjkwMyAzNi4wMjQgMTYzLjUxMSAzNi4wMjF6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDhGODAiIGQ9Ik0xNjMuNTE0IDU0LjU1NWMtMS4yNjkgMC4wMzUtMi4zODItMS4xMTMtMi4zNDctMi4zNDcgLTAuMDAxLTEuOTY3IDIuNTEyLTMuMTggNC4wMjgtMS42NjVDMTY2LjY3MiA1Mi4wMjEgMTY1LjU4NiA1NC42MTYgMTYzLjUxNCA1NC41NTV6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBNkE2QTgiIGQ9Ik03Ny40MTggMTIwLjYyOWgxLjQ1NGwwLjAwNy01LjIxaDIuNDYxdi0wLjk0MmgtMi40NThjMC4wMDEtMC4xMDEgMC4wMDktMS4yNTIgMC4wMDgtMS4xNTEgMC0xLjc2IDAuNDM3LTIuODI5IDIuMTExLTIuODY1bDAuMDU5LTAuMDAxdjAuMDExaDAuNzc3di0wLjg1OGMtMC41MzEgMC4wMjUtMS41MjgtMC4xMDMtMi41NDcgMC4yODNDNzYuNzg0IDExMC44NDcgNzcuNDkgMTEyLjg2OSA3Ny40MTggMTIwLjYyOXoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTYyLjMzNCAxMTIuMjMySDYwLjg4bC0wLjAxNyA0LjcwOGMwIDEuNjUxLTAuMzg0IDIuNzc1LTEuOTg4IDIuODU5IC0yLjYwMS0wLjEzNC0xLjk1OC0yLjc4MS0yLjAxMS03LjU2OGgtMS40NTRjMC4xMDQgNC44NDUtMC42MjggNy4xOTMgMS44NzEgOC4xMzkgMC42NDUgMC4yNDUgMS4yNjIgMC4yNDEgMS41MjIgMC4yNjdsMC4wMDEgMC4wMTNjMC4wNDktMC4wMDIgMC4xMDItMC4wMDEgMC4xMzYgMGwwLjAwMS0wLjAxM2MwLjg3NC0wLjA4OCAxLjAyNi0wLjAyNSAxLjg0Mi0wLjQzMmwwLjA4NC0wLjA0M2MtMC4wNDYgMi4zNDMgMC4yNzEgNC40MjMtMi4xNDEgNC40NTVsMC4wNzcgMC44NDNjMS4wOTctMC4wMDkgMi4xNy0wLjI5OCAyLjg5OS0xLjEzIDAuNTQ3LTAuNjQgMC41NjktMS41NTMgMC42NS0yLjUyIDAtMC4xMDEgMC01LjEyNiAwLTQuODA3TDYyLjMzNCAxMTIuMjMyeiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMTYuMzQzIDExMS4zOThjMC40MTkgMCAwLjc2MS0wLjM0MSAwLjc2MS0wLjc2MXYtMC4yNTFjMC0wLjQxOS0wLjM0MS0wLjc2MS0wLjc2MS0wLjc2MSAtMC40MTkgMC0wLjc2MSAwLjM0MS0wLjc2MSAwLjc2MXYwLjI1MUMxNS41ODIgMTExLjA1NiAxNS45MjQgMTExLjM5OCAxNi4zNDMgMTExLjM5OHoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTE1LjU4MiAxMTIuMzI4SDE3LjEzNFYxMjAuNjI4SDE1LjU4MnoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTMxLjg1NyAxMTEuMzk4YzAuNDE5IDAgMC43NjEtMC4zNDEgMC43NjEtMC43NjF2LTAuMjUxYzAtMC40MTktMC4zNDEtMC43NjEtMC43NjEtMC43NjEgLTAuNDE5IDAtMC43NiAwLjM0MS0wLjc2IDAuNzYxdjAuMjUxQzMxLjA5NyAxMTEuMDU2IDMxLjQzOCAxMTEuMzk4IDMxLjg1NyAxMTEuMzk4eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMzEuMDk3IDExMi4yMzJIMzIuNjQ5VjEyMC42NDJIMzEuMDk3eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMTQyLjUyNiAxMTEuMjE3YzAuNDE5IDAgMC43NjEtMC4zNDEgMC43NjEtMC43NjF2LTAuMDdjMC0wLjQxOS0wLjM0MS0wLjc2MS0wLjc2MS0wLjc2MSAtMC40MTkgMC0wLjc2IDAuMzQxLTAuNzYgMC43NjF2MC4wN0MxNDEuNzY2IDExMC44NzYgMTQyLjEwNyAxMTEuMjE3IDE0Mi41MjYgMTExLjIxN3oiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTE0MS43NTEgMTEyLjIzMkgxNDMuMzAyVjEyMC42NDJIMTQxLjc1MXoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTEwNy42MyAxMTcuNzh2LTUuNTQ3aC0xLjUybC0wLjAxNyA0LjM5OGMwIDIuMjk0IDEuMTY5IDMuODg4IDMuNjQyIDMuOTg5djAuMDFoNC4zODF2LTguMzk2aC0xLjU1MnY3LjU3N2gtMi45MDVDMTA4LjU0MSAxMTkuODA5IDEwNy42MyAxMTguODk4IDEwNy42MyAxMTcuNzh6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBNkE2QTgiIGQ9Ik05NS41NiAxMTYuMjMxYzAuMDMzIDAuMTI2LTAuMzE5IDMuMTc5IDIuMTgyIDQuMTI4IDAuNjk1IDAuMjY0IDEuMzYzIDAuMjYgMS41MTUgMC4yNzd2MC4wMDdoNC41N3YtMTEuMDE3aC0xLjU1MnYyLjYwN2MtMC4xMDMgMC0zLjI3MiAwLjAxLTMuMDc0IDAuMDFDOTYuNzY3IDExMi4zNDEgOTUuNTYgMTEzLjkgOTUuNTYgMTE2LjIzMXpNOTkuMzcxIDExMy4wNTJoMi45MDV2Ni43NzFoLTIuOTA1Yy0xLjExOCAwLTIuMDI5LTAuOTExLTIuMDI5LTIuMDI5di0yLjcxM0M5Ny4zNDEgMTEzLjk2MiA5OC4yNTIgMTEzLjA1MiA5OS4zNzEgMTEzLjA1MnoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTE2MS40MTEgMTEyLjUxNmMtMC43MDMtMC4yNjctMS40MTItMC4yNjUtMS41MTUtMC4yNzZ2LTAuMDA3aC00LjM5MXY4LjQxaDEuNTUydi03LjU5MWgyLjkwNWMxLjExOCAwIDIuMDI5IDAuOTExIDIuMDI5IDIuMDI5djUuNTYyaDEuNTg2bDAuMDE3LTQuNDEyQzE2My41OTQgMTE0LjE0OSAxNjIuNjI4IDExMi45NzcgMTYxLjQxMSAxMTIuNTE2eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMTE2LjE2NSAxMTYuNjljMCAyLjI4MSAxLjE2NyAzLjg0NiAzLjYgMy45NDNsMC4wNTUgMC4wMDJ2MC4wMDdoMy42NDd2LTAuODA5aC0zLjUzNWMtMS4xMDYgMC0yLjAwNy0wLjktMi4wMDctMi4wMDcgMC0wLjAwNi0wLjA2MS0wLjkzNS0wLjA2MS0xLjQ1MiAwLTAuNTE2IDAuMDYxLTEuMzIzIDAuMDYxLTEuMzMxIDAtMS4xMDIgMC45LTIuMDAyIDIuMDA3LTIuMDAyaDMuNTM1di0wLjgwOWMtMi45NjggMC4wNzctNS4wMzgtMC40MDItNi4zNyAxLjExNkMxMTUuNzcyIDExNC45IDExNi4yODkgMTE1Ljk1NSAxMTYuMTY1IDExNi42OXoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTM5LjYxOCAxMTUuODY3Yy0wLjkzOS0wLjM1Ny0yLjY2NS0wLjAzOS0yLjk1OC0xLjQxNSAtMC4xMzctMC42NDMgMC40ODEtMS40NzEgMS44NzYtMS40NzFsMS42MDMtMC4wMDN2LTEuMDM0Yy0xLjEzNS0wLjAwNi0yLjQyOS0wLjIxNi0zLjUxMyAwLjE5MyAtMS44MDcgMC42ODYtMi4xMDggMi40NDgtMS4xNzggMy41MzggMS4zOTMgMS41ODMgMy4xMjQgMC43NiAzLjg5NyAxLjY1MyAwLjM4OSAwLjQ1MSAwLjQ2OCAwLjg3NyAwLjIzNiAxLjI2OSAtMC43NTYgMS4yNzUtMi40MzkgMC45MTgtNC4wNjQgMC45NzF2MS4wODNjMC4zMiAwLjAzIDIuNTEtMC4wMDMgMi43OTMtMC4wMzJDNDIuMDY5IDEyMC4yMjYgNDIuMzAxIDExNi44ODUgMzkuNjE4IDExNS44Njd6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBNkE2QTgiIGQ9Ik0xLjgxOCAxMDkuNjIxSDB2MTEuMDA3aDEuNTIzdi03Ljg4MWw0LjAyNyA3Ljg4MWgwLjgyMWw0LjA0MS04LjEzNCAwLjMwNi0wLjU2NXY4LjY5OWgxLjYzdi0xMS4wMDdoLTEuNzg2bC00LjI1MyA4LjU0Nkg2LjE1MUM0Ljc1OCAxMTUuNDIxIDEuNjE1IDEwOS4yMjIgMS44MTggMTA5LjYyMXoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTg4LjYwNiAxMTUuMTY3TDkyLjUzMiAxMTUuMTY3IDkyLjUzMiAxMTQuMzIyIDg4LjYwNiAxMTQuMzIyIDg4LjYwNiAxMTAuNTYzIDk0LjQ3NSAxMTAuNTYzIDk0LjQ3NSAxMDkuNjIyIDg3LjA2IDEwOS42MjIgODcuMDYgMTIwLjYyOSA5NC40NzUgMTIwLjYyOSA5NC40NzUgMTE5LjgyMyA4OC42MDYgMTE5LjgyMyIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNNDQuOTE0IDExOS4yMDZjLTAuNzkyLTAuOTQ4LTAuNTE4LTIuNTA0LTAuNTc5LTUuODk1aDIuNDU4di0xLjA3OWgtMi40NjFsLTAuMDA2LTIuNDg1aC0xLjQ1NGMwLjA2MyA2LjI4Mi0wLjMyNSA4LjY0NSAwLjYzMiA5Ljc2NiAwLjMyOSAwLjM3NCAwLjc0NiAwLjY1OCAxLjIzOSAwLjg0NSAwLjk0NCAwLjM1OSAxLjk0MSAwLjI0OSAyLjM3NyAwLjI3di0wLjgwN0M0Ni40NTMgMTE5Ljc5NCA0NS40OSAxMTkuODk5IDQ0LjkxNCAxMTkuMjA2eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNNDkuMDU0IDEyMC42NDNoMS41MjVjMC4wNTgtNC44MjctMC41ODktNy41MiAyLjMwOS03LjUyNmgwLjY1OHYtMC44ODVjLTAuNDg4IDAuMDI1LTEuNTA2LTAuMDkzLTIuNTM2IDAuMjk3QzQ4LjM5MSAxMTMuNTIyIDQ5LjE2IDExNi4wMzUgNDkuMDU0IDEyMC42NDN6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBNkE2QTgiIGQ9Ik0xNTEuNTI3IDExMi41MDljLTAuNjI4LTAuMjM4LTEuMTgyLTAuMjQzLTEuNDgxLTAuMjc2IC0wLjM1MSAwLjA0MS0yLjM0NS0wLjI2My0zLjU0MSAxLjEwMyAtMS4xNzQgMS4zNzctMC44NyAzLjEwMi0wLjkyIDMuMzk5IDAgMi4zMjEgMS4yMDcgMy44IDMuNTU2IDMuODk1IDAuMjgxLTAuMDYyIDIuMzQ5IDAuMzI3IDMuNTk1LTEuMDk0IDAuNjM3LTAuNzQ1IDAuOTIxLTEuNjA5IDAuOTIxLTIuODAxQzE1My42MDggMTE2LjYxNCAxNTQuMDY5IDExMy40NzIgMTUxLjUyNyAxMTIuNTA5ek0xNDkuMzA1IDExOS44NGMtMS42NSAwLTIuMDA2LTEuNjkxLTIuMDgzLTIuNDE5IC0wLjU2LTUuMzA0IDIuNTk4LTQuMjU1IDIuNzEyLTQuMzkxIDEuNjE2IDAgMS45OTEgMS42MjcgMi4wNzggMi4zMjZDMTUyLjY3NyAxMjAuNzM1IDE0OS40MTIgMTE5LjcxMyAxNDkuMzA1IDExOS44NHoiLz4KICAgICAgPHBhdGggZmlsbD0iI0E2QTZBOCIgZD0iTTEyNC42NCAxMTcuMzY1YzAuMzU3IDIuODEzIDIuNDgyIDMuNTQ0IDUuMjc4IDMuMjMzIDAuODc3LTAuMTk1IDEuMDE3LTAuMjgxIDEuNTI2LTAuNTkydjAuNjIyaDEuNTg4di04LjQxMmMtMC4xMDEgMC01LjA0MSAwLjAxMS00LjcyNiAwLjAxIC0xLjA2NiAwLjA0My0yLjA2IDAuMzQ4LTIuNzU4IDEuMTQ0QzEyNC4yMDIgMTE0Ljk0OSAxMjQuNjc2IDExNi44OTEgMTI0LjY0IDExNy4zNjV6TTEyNi40MDggMTE1LjEyMmMtMC4wMDEtMS4xMzYgMC45MjktMi4wNjUgMi4wNy0yLjA2NWgyLjk2NXY0LjAzMmwtMC4wMTggMC42NmMwIDEuMTIxLTAuOTg1IDIuMDY5LTIuMTUyIDIuMDY5aC0wLjgwMWMtMS4xNDIgMC0yLjA3MS0wLjkyOS0yLjA3MS0yLjA3MSAwIDAtMC4wNjYtMC42NS0wLjA2Ni0xLjMxQzEyNi4zMzcgMTE1Ljc3NyAxMjYuNDA4IDExNS4xMjcgMTI2LjQwOCAxMTUuMTIyeiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMTM3LjE4OSAxMTguMzE2Yy0wLjIyNC0wLjk1LTAuMTA5LTEuNjg4LTAuMTUtNS4xNDNoMi40NTl2LTAuOTQxaC0yLjQ2MWwtMC4wMDctMi40ODVoLTEuNDU1YzAuMDY0IDYuMjgyLTAuMzI0IDguNjQ1IDAuNjMzIDkuNzY2IDEuMjU2IDEuNDI3IDMuMzI5IDEuMDUgMy42MTUgMS4xMTV2LTAuODA3QzEzOS40NDYgMTE5LjczNyAxMzcuNzI4IDEyMC4yMzQgMTM3LjE4OSAxMTguMzE2eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNNzMuNjk1IDExMi40OWMtMC42NDItMC4yNDQtMS4yMzQtMC4yNDktMS40ODctMC4yNzggLTAuMTYxIDAuMDYtNC40NzgtMC42MTktNC40NzggMy45MTkgMC4wNDEgMC4xNjgtMC4zNjIgMy4yOTMgMi4xMzkgNC4yNDEgMS4wMDQgMC4zODIgMi44MzQgMC4zNzcgMy44MjYgMCAwLjQ4NC0wLjE4MyAwLjg5My0wLjQ2MyAxLjIxNC0wLjgyOCAxLjE1OC0xLjM1NiAwLjg4LTIuOTk3IDAuOTI0LTMuNDEyQzc1LjgzMyAxMTQuMDg3IDc0Ljg4OCAxMTIuOTQyIDczLjY5NSAxMTIuNDl6TTc0LjE1NiAxMTcuODgyYy0wLjQ2NyAyLjQzNS0yLjU2NSAxLjg5NC0yLjY5MSAxLjk2NiAtMS42NTYgMC0yLjAxMy0xLjY5OC0yLjA5LTIuNDI4IC0wLjU2NC01LjMyNiAyLjYwNi00LjI2OSAyLjcyMy00LjQwNyAxLjYyMSAwIDEuOTk5IDEuNjMzIDIuMDg1IDIuMzM1Qzc0LjI0OSAxMTUuODk0IDc0LjMzNSAxMTYuOTQ5IDc0LjE1NiAxMTcuODgyeiIvPgogICAgICA8cGF0aCBmaWxsPSIjQTZBNkE4IiBkPSJNMjQuMzcyIDExMi4yNHYtMC4wMDdoLTQuMzkxdjguNDFoMS41NTJ2LTcuNTkxaDIuOTA1YzEuMTE4IDAgMi4wMjkgMC45MTEgMi4wMjkgMi4wMjl2NS41NjJoMS41ODZsMC4wMTctNC40MTJjMC0xLjIyMi0wLjI5MS0yLjEwNy0wLjk0NC0yLjg2OUMyNi4wODUgMTEyLjE3NSAyNC40NzMgMTEyLjI3MSAyNC4zNzIgMTEyLjI0eiIvPgogICAgICA8Y2lyY2xlIGN4PSIxMTYuMSIgY3k9Ijc4LjExMSIgcj0iMS4zOTUiIGZpbGw9IiMwMDlEOEUiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOUQ4RSIgZD0iTTE0My4wNTUgODIuNDk0bC0wLjAyMyAxMS4yMTdjMCAwLjY5NS0wLjA2MiAxLjMxMS0wLjE4NCAxLjgzMSAtMC4xMzkgMC40OTMtMC4zMjQgMC44OC0wLjU1MiAxLjE1NCAtMC4yMjcgMC4yNzItMC41MjYgMC40Ny0wLjg5IDAuNTkxIC0wLjMyMiAwLjEwOC0wLjcyNiAwLjE2Mi0xLjIgMC4xNjJoLTAuMDU3bDAuMTI3IDEuMzkxaDAuMDQ4YzAuODc1IDAgMS42NjQtMC4xMzEgMi4zNDctMC4zOSAwLjY4Mi0wLjI1OCAxLjI2LTAuNjU0IDEuNzE4LTEuMTc0IDAuNzM2LTAuODYxIDEuMTczLTIuMDMyIDEuMjk5LTMuNDhsLTAuMDI0LTExLjMwM0gxNDMuMDU1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTM2LjE5MyA3Ni43MTZIMTM4Ljc0MzAwMDAwMDAwMDAyVjkzLjA4Mzk5OTk5OTk5OTk5SDEzNi4xOTN6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDlEOEUiIGQ9Ik0xMjkuNTgyIDgyLjQ5NEwxMjkuNTgyIDgyLjQ5NGwtMC4wMjMgMTEuMjE3YzAgMC42OTItMC4wNjIgMS4zMDgtMC4xODQgMS44MzEgLTAuMTM5IDAuNDk0LTAuMzI1IDAuODgxLTAuNTUzIDEuMTU0IC0wLjIyNiAwLjI3Mi0wLjUyNiAwLjQ3LTAuODg5IDAuNTkxIC0wLjMyMiAwLjEwOC0wLjcyNiAwLjE2Mi0xLjIgMC4xNjJoLTAuMDU4bDAuMTI3IDEuMzkxaDAuMDQ4YzAuODc1IDAgMS42NjUtMC4xMzEgMi4zNDctMC4zOSAwLjY4Mi0wLjI1OCAxLjI2LTAuNjU0IDEuNzE4LTEuMTc0IDAuNzM2LTAuODYyIDEuMTczLTIuMDMzIDEuMjk4LTMuNDhsLTAuMDI0LTExLjMwM0gxMjkuNTgyeiIvPgogICAgICA8cGF0aCBmaWxsPSIjMDA5RDhFIiBkPSJNMTEwLjIyNyA4Ny45ODJ2NS4xMDJoMTQuNjA1di0xMC41OWgtOS4xMTZDMTEyLjY4NCA4Mi40OTQgMTEwLjIyNyA4NC45NTEgMTEwLjIyNyA4Ny45ODJ6TTEyMi4yNzEgODQuNTkzdjYuMjY4aC05LjQ3NXYtMy4xMzJjMC0xLjczMiAxLjQwNC0zLjEzNiAzLjEzNi0zLjEzNkgxMjIuMjcxeiIvPgogICAgICA8Y2lyY2xlIGN4PSI4MS41OTMiIGN5PSI3OC4xMTEiIHI9IjEuMzk1IiBmaWxsPSIjMDA5RDhFIi8+CiAgICAgIDxjaXJjbGUgY3g9IjE4LjY1NCIgY3k9Ijk3LjM2MiIgcj0iMS4zOTUiIGZpbGw9IiMwMDlEOEUiLz4KICAgICAgPGNpcmNsZSBjeD0iMjIuNjg1IiBjeT0iOTcuMzYyIiByPSIxLjM5NSIgZmlsbD0iIzAwOUQ4RSIvPgogICAgICA8Y2lyY2xlIGN4PSI4NS42MjQiIGN5PSI3OC4xMTEiIHI9IjEuMzk1IiBmaWxsPSIjMDA5RDhFIi8+CiAgICAgIDxjaXJjbGUgY3g9IjEyMC4xMyIgY3k9Ijc4LjExMSIgcj0iMS4zOTUiIGZpbGw9IiMwMDlEOEUiLz4KICAgICAgPGNpcmNsZSBjeD0iMTQ0LjM5MiIgY3k9Ijc4LjExMSIgcj0iMS4zOTUiIGZpbGw9IiMwMDlEOEUiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOUQ4RSIgZD0iTTkyLjM1OCA5MC44NjFoLTYuMzh2LTguMzY3aC0yLjU1djguMzY3aC0yNS41di0yLjk2NGMwLTEuODI0IDEuNDc5LTMuMzA0IDMuMzAzLTMuMzA0aDEwLjg4NHYtMi4wOTlINjEuMDEzYy0zLjEyMyAwLTUuNjU1IDIuNTMyLTUuNjU1IDUuNjU1djIuNzEySDM0Ljc2Vjc2LjcxNmgtMi41MjN2MTQuMTQ1SDI1LjEzdi04LjM2N2gtMi41NXY4LjM2N2gtNC44MjdsLTAuMDIyLTIuNTQ2IC0wLjAwMS0wLjAwMXYtMC4wMzVjMC0xLjgwMS0wLjU2NC0zLjIyMi0xLjY3Ni00LjIyNSAtMC45ODktMC45NDItMi4zOTYtMS40NjYtNC4xODQtMS41NkgxLjc2N2wtMC4wMDEgMC4wMDEgMC4wMzUgMTAuNzgyYzAgMC42OTItMC4wNjIgMS4zMDgtMC4xODQgMS44MzEgLTAuMTM5IDAuNDkzLTAuMzI0IDAuODgtMC41NTMgMS4xNTQgLTAuMjI2IDAuMjcxLTAuNTI1IDAuNDcxLTAuODg5IDAuNTkxQzAuMTIzIDk2Ljg3IDAuMDU2IDk2Ljg3OCAwIDk2Ljg5MnYxLjQ1N2MwLjUxOC0wLjA2IDEuMDAyLTAuMTY4IDEuNDM5LTAuMzMzIDAuNjgyLTAuMjU4IDEuMjYxLTAuNjUzIDEuNzE5LTEuMTc0IDAuNzM2LTAuODYzIDEuMTc0LTIuMDM0IDEuMjk4LTMuNDhsLTAuMDAxLTAuMjc4SDk0Ljk5djBWNzYuNzE2aC0yLjYzMlY5MC44NjF6TTQuNiA4NC41OTNsNy4zODQgMC4wMDIgMC4xOTQtMC4wMDFjMC4xMTMgMC4wMTcgMC4yMDYgMC4wMzQgMC4zMDggMC4wNTMgMS41MjUgMC4yODIgMi42MzQgMS42MTEgMi42MzQgMy4xNjN2My4wNTFINC40NDlsLTAuMDE2LTYuMUM0LjQzMyA4NC42NjggNC41MDggODQuNTkzIDQuNiA4NC41OTN6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMwMDlEOEUiIGQ9Ik0xNjMuNTk0IDgyLjQ5NGgtOS4wMjRjLTMuMDc3IDAtNS41NzEgMi40OTQtNS41NzEgNS41NzF2NS4wMTloMTEuOTVsLTAuMDAxIDAuNjI3YzAgMC42OTMtMC4wNjIgMS4zMDktMC4xODUgMS44MzEgLTAuMTM5IDAuNDkyLTAuMzI0IDAuODc5LTAuNTUyIDEuMTU0IC0wLjIyNyAwLjI3Mi0wLjUyNiAwLjQ3LTAuODkgMC41OTEgLTAuMTM1IDAuMDQ1LTAuMjkyIDAuMDc1LTAuNDU0IDAuMTAydjEuNDI4YzAuNjI3LTAuMDQ5IDEuMjAzLTAuMTcxIDEuNzE4LTAuMzY2IDAuNjgyLTAuMjU4IDEuMjYtMC42NTQgMS43MTgtMS4xNzQgMC43MzYtMC44NjEgMS4xNzMtMi4wMzIgMS4yOTktMy40OEwxNjMuNTk0IDgyLjQ5NHpNMTU0Ljc4OCA4NC41OTNoNi4xODF2MC4wODRsLTAuMDE1IDYuMTg0aC05LjM4NnYtMy4wNDlDMTUxLjU2OCA4Ni4wMzQgMTUzLjAxIDg0LjU5MyAxNTQuNzg4IDg0LjU5M3oiLz4KICAgICAgPHBhdGggZmlsbD0iIzAwOUQ4RSIgZD0iTTk4Ljg1NyA3Ni43MTZjLTAuMDIgMC0wLjAzNyAwLjAxNy0wLjAzNyAwLjAzN3YxNi4yOTRjMCAwLjAyIDAuMDE3IDAuMDM3IDAuMDM3IDAuMDM3aDIuNDc2YzAuMDIxIDAgMC4wMzctMC4wMTYgMC4wMzctMC4wMzdWNzYuNzUzYzAtMC4wMjEtMC4wMTYtMC4wMzctMC4wMzctMC4wMzdIOTguODU3eiIvPgogICAgPC9nPgogIDwvc3dpdGNoPgo8L3N2Zz4K";
+        const VISION_LOGO = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTguNDI1IDEzMi43NDQiIHN0eWxlPSJ2ZXJzaW9uOjEiPgogIDxzd2l0Y2g+CiAgICA8Zm9yZWlnbk9iamVjdCB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB4PSIwIiB5PSIwIiByZXF1aXJlZEV4dGVuc2lvbnM9Imh0dHA6Ly9ucy5hZG9iZS5jb20vQWRvYmVJbGx1c3RyYXRvci8xMC4wLyIvPgogICAgPGc+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xNDEuNDY4IDc1LjM3MnYwLjE0NWMwIDkuNTc1LTYuOTc3IDE2LjYxMS0xOC4zMTUgMTYuNjExIC05LjE1NyAwLTE1LjQ4LTMuNjI3LTE5Ljg0LTguNzc3bDcuNzA0LTcuMzI3YzMuNDg4IDMuOTE4IDcuMTIyIDYuMDkzIDEyLjI4MiA2LjA5MyA0LjIxNSAwIDcuMTk1LTIuMzkzIDcuMTk1LTYuMTY1IC0wLjA1Ni0wLjEgMC44MjItNi42LTkuOTU3LTYuNmgtNC42NTFsLTEuNzQ1LTcuMTEgMTYuMzItMTYuMzg1IC02LjU0IDQuMmgtMTcuNjI4di05LjU3NGgzNC4zNzV2OC40MTRsLTEyLjg2MyAxMi4yNThDMTM0LjcwOSA2Mi4zMTYgMTQxLjQ2OCA2NS45NDIgMTQxLjQ2OCA3NS4zNzJNMTA5LjU2MyAxNy4yNjVjMC00LjU5NyAzLjMwMi04LjI5NyA3LjkzNi04LjI5N2g1LjIyMmwtMS4zNjcgMC42ODFjMC4wNjIgMTIuNi0wLjI1IDE0LjE4NyAwLjU1NiAxNi4wMjlsLTQuMzUzLTAuMDAxYy00LjYzNCAwLTcuOTk0LTMuNzU4LTcuOTk0LTguMzU0VjE3LjI2NXpNMTE3LjQ5OSAyNy43ODhoNC42Mzd2LTEuNjY3YzAuMzM4IDAuNTg2IDAuNzkzIDEuMDQxIDEuNDY0IDEuMzU5IDEuNDc1IDAuNyAwLjQwMyAwLjI2IDQyLjcwMyAwLjM5VjYuODU4aC0yLjIzMXYxOC43ODVjMCAwLTM4LjY3OCAwLjE0OS0zOS40MTMtMC4xODEgLTAuNjM4LTAuMjg3LTAuODctMC45NDMtMC45NzYtMS42NDIgLTAuMTY5LTEuMTM1LTAuMDY2LTEuMTU2LTAuMDk3LTE2Ljk2MmgtNi4wMjljLTYuMTY5IDAtMTAuMzY5IDQuODg1LTEwLjM2OSAxMC40NjV2MC4wNThDMTA3LjE4OCAyMi45NiAxMTEuMzMgMjcuNzg4IDExNy40OTkgMjcuNzg4TTE4Mi43NDYgNC42M2gtNC44ODhjMC4xMDYtMS42MTYtMC42NDItNC42MyAyLjY1MS00LjYzaDEuNTc0djEuNTUyYy0xLjUyNCAwLjExMy0yLjQwMS0wLjM3MS0yLjQwMSAwLjg0NnYwLjUxNWgzLjA2NFY0LjYzek0xODguMzk2IDI4LjA5N2MtMC41OTUgMC0xLjItMC4wODMtMS44MTMtMC4yNTFsMC41ODYtMi4xNDNjMS4wMDkgMC4yODcgMi4yOTkgMC4zMDQgMi44MzEtMC41OTggMC42MjEtMS4wNjggMC4zOTktMS40NDQgMC40MzItMTguMjQ3aDIuMjMxYy0wLjA2NCAxNS42ODUgMC4xNTQgMTYuMTIzLTAuMjA5IDE3Ljk0MUMxOTIuMDI2IDI2LjkyNiAxOTAuNzM2IDI4LjA5NyAxODguMzk2IDI4LjA5N00xMjMuNTg2IDQuNjNoLTIuMjMyVjIuNDAzaDIuMjMyVjQuNjN6TTE3Mi42OTIgMTIuMzE0YzEuMDQ3LTIuMDM5IDMuMjQ1LTMuMTc0IDUuNDkyLTMuMTk4VjkuMTEyaDMuNjA1bC0xLjI3NCAwLjYzNXYxMGMtMS43NTYtMC4wNTItMi45OSAwLjE2Ny00LjYxNi0wLjM0OSAtMi4yMi0wLjY5OC0zLjcyNC0yLjQwNi0zLjcyNC00Ljg4NUMxNzIuMTc1IDEzLjcxNiAxNzIuMzQ3IDEyLjk4MiAxNzIuNjkyIDEyLjMxNE0xNzIuNjkyIDIwLjIwNmMyLjkwNSAyLjA3IDYuODY2IDEuNzI4IDcuMDczIDEuNzY3bDAuNzUtMS41NzFjLTAuMTIxIDEuNTIzIDAuNDE5IDMuNjUxLTEuMDA0IDQuNzE3IC0xLjIwMyAwLjg5OS0zLjM0OCAwLjg3LTQuNjcyIDAuNTU2IC0wLjU0OC0wLjEyOS0xLjE3Ni0wLjM1Mi0xLjg4My0wLjY2N2wtMC42OTcgMi4xNDNjMS40MTQgMC41MjEgMi43NjYgMC45NDYgNC4yNjcgMC45NDYgMi4xNzYgMCAzLjc1Ni0wLjUxNSA0Ljc0Mi0xLjU0NCAwLjk4NS0xLjAzMSAxLjQ3OC0yLjQxOCAxLjQ3OC00LjE2MlY2Ljg1OGMtMi43NDYgMC4wODYtNC44MjktMC4yNzctNy4zMzUgMC41ODVDMTY4LjY5NiA5Ljc1MiAxNjguNTYyIDE3LjI2NiAxNzIuNjkyIDIwLjIwNk0xMTkuMTIzIDQuNjNoLTIuMjMyVjIuNDAzaDIuMjMyVjQuNjN6TTk2LjAyOCA2LjgzNGgyLjMwNHYyMC45MTFoLTEuODg2TDgxLjYwNyA4LjkzNmwxLjMxMiAzLjA0OHYxNS43NjFoLTIuMzA1VjYuODM0aDIuMjE1bDE0LjE3IDE3Ljk5IC0wLjk3MS0yLjU2NlY2LjgzNHpNOS4wMDkgMjcuODk0TDAgNi44MzRoMi42MzRjMC4xMzQgMC4zMjQgNy4zMTQgMTcuNjc5IDguMDQyIDE5LjQzOWwtMC4yMjgtMi4yOTggNy4xMjEtMTcuMTQxaDIuNTQzbC05LjAwOCAyMS4wNkg5LjAwOXpNNDguOTMyIDYuODM0aDIuMzY0djIwLjkxaC0yLjM2NFY2LjgzNHpNNzQuMjkgMTcuMzQ5YzAgNC43NS0zLjQxMSA4LjU3My04LjIgOC41NzNzLTguMjYxLTMuODgzLTguMjYxLTguNjMydi0wLjA2MWMwLTQuNzQ5IDMuNDEzLTguNTcyIDguMjAxLTguNTcyIDQuNzg5IDAgOC4yNiAzLjg4MyA4LjI2IDguNjMzVjE3LjM0OXpNNjYuMDkgNi40NzZjLTYuMzc1IDAtMTAuNzE1IDUuMDQ4LTEwLjcxNSAxMC44MTR2MC4wNTljMCA1Ljc2NSA0LjI4IDEwLjc1NCAxMC42NTUgMTAuNzU0czEwLjcxNS01LjA0OCAxMC43MTUtMTAuODEzdi0wLjA2MUM3Ni43NDUgMTEuNDY1IDcyLjQ2NSA2LjQ3NiA2Ni4wOSA2LjQ3Nk00NS4wMzEgMjIuMDY5djAuMDU5YzAgMy41ODQtMi45OTMgNS45MTUtNy4xNTMgNS45MTUgLTMuMzIyIDAtNi4wNDUtMS4xMDUtOC41NTktMy4zNDZsMS40NjYtMS43MzJjMi4xODUgMS45NzEgNC4yOCAyLjk1NiA3LjE4NCAyLjk1NiAyLjgxMyAwIDQuNjY4LTEuNDkyIDQuNjY4LTMuNTU0di0wLjA1OWMwLTUuODM2LTEyLjQ4LTEuOTg2LTEyLjQ4LTEwLjAwOHYtMC4wNTljMC0zLjI4NiAyLjkwMy01LjcwNiA2Ljg4NC01LjcwNiAzLjA1MiAwIDUuMjM3IDAuODY3IDcuMzYyIDIuNTdsLTEuMzc2IDEuODIxYy00Ljc1LTMuODY0LTEwLjUwNi0yLjM4NC0xMC41MDYgMS4xMDZ2MC4wNmMwIDEuOTcxIDEuMDc3IDMuMDc2IDUuNjg3IDQuMDYyQzQyLjg3NyAxNy4xNyA0NS4wMzEgMTguODczIDQ1LjAzMSAyMi4wNjlNMjUuNjg4IDI3Ljc0NWgtMi4zNjRWNi44MzVoMi4zNjRWMjcuNzQ1ek0xNjMuMjkzIDMwLjA5NmgyLjIzMnYyLjIyN2gtMi4yMzJWMzAuMDk2ek0xNTguODMgMzAuMDk2aDIuMjMydjIuMjI3aC0yLjIzMlYzMC4wOTZ6TTE4LjcxIDgxLjYwOWgxOS4zOTh2OS42NDlIMC40NjF2LTguODVjMTguODExLTE1Ljk2NCAyNS43MjgtMTkuMDg0IDI1LjcyOC0yNi4wNCAwLTQuMjgtMi44MzUtNi42MDEtNi44MzItNi42MDEgLTMuOTI1IDAtNi42MTQgMi4xNzUtMTAuMzkzIDYuODE3bC03Ljg0OS02LjMwOUM2LjEzIDQzLjQ1NiAxMSAzOS43NTYgMjAuMDg0IDM5Ljc1NmMxMC41MzggMCAxNy41MTUgNi4xNjYgMTcuNTE1IDE1LjY2OXYwLjE0NGMwIDExLjkxNi05LjAyMSAxNS43NTctMjQuNDkgMjguMjIzbC0yLjE2IDEuNjY0TDE4LjcxIDgxLjYwOXpNMTg2LjcyNSA2Ni4wMTVjMCA4LjcwNC02LjI1IDE1LjgxMy0xNS4yNjMgMTUuODEzIC05LjAxMiAwLTE1LjQwNy03LjI1NC0xNS40MDctMTUuOTU5di0wLjE0NWMwLTguNzA0IDYuMjUxLTE1LjgxMiAxNS4yNjItMTUuODEyIDkuMDExIDAgMTUuNDA4IDcuMjU0IDE1LjQwOCAxNS45NTdWNjYuMDE1ek0xNzEuNDYyIDM5LjYxMmMtMTUuNjk3IDAtMjcuMTA4IDExLjgyMy0yNy4xMDggMjYuMjU3djAuMTQ2YzAgMTQuNDM1IDExLjI2NCAyNi4xMTMgMjYuOTYzIDI2LjExM3MyNy4xMDgtMTEuODI0IDI3LjEwOC0yNi4yNTl2LTAuMTQ1QzE5OC40MjUgNTEuMjkgMTg3LjE2IDM5LjYxMiAxNzEuNDYyIDM5LjYxMiIvPgogICAgICA8cGF0aCBmaWxsPSIjMjkzNjdCIiBkPSJNNjguNTE4IDM2LjI3Mkw3MS4wOTUgMzguNzQgNjguNjIyIDQxLjMxMSA2Ni4wNDYgMzguODQzIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNCMUFFQjMiIGQ9Ik03NC40MTUgMzguODQzTDc2Ljk5IDQxLjMxMSA3OS40NjMgMzguNzQgNzYuODg3IDM2LjI3MiIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNNzAuNzg3IDQyLjA4NEw3Mi43OTQgNDQuMDA1IDc0LjcxOCA0Mi4wMDMgNzIuNzEzIDQwLjA4MiIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNNzguMTQyIDQzLjE4M0w4MC4xNDggNDUuMTA1IDgyLjA3MiA0My4xMDMgODAuMDY2IDQxLjE4MSIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNNjcuNTA3IDQ1LjE0NUw2OS41MTMgNDcuMDY3IDcxLjQzNyA0NS4wNjUgNjkuNDMzIDQzLjE0MyIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNNzQuMjM4IDQ1LjM3OEw3Ni4yNDMgNDcuMyA3OC4xNjggNDUuMjk4IDc2LjE2MiA0My4zNzYiLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTcxLjYwNSA0Ny42ODFMNzMuMDE2IDQ5LjAzMyA3NC4zNyA0Ny42MjQgNzIuOTU5IDQ2LjI3MiIvPgogICAgICA8cGF0aCBmaWxsPSIjNThCNzVFIiBkPSJNNzYuOTI4IDQ4Ljc0Mkw3OC4zMzkgNTAuMDk0IDc5LjY5NCA0OC42ODUgNzguMjgzIDQ3LjMzNCIvPgogICAgICA8cGF0aCBmaWxsPSIjMzA4OEM4IiBkPSJNODguOTE4IDM3LjU5M0g5My4zNjgwMDAwMDAwMDAwMVY0Mi4wMzUwMDAwMDAwMDAwMDRIODguOTE4eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTEwLjM5IDkxLjEzNSAzOS44MTgpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMxRTM4NzEiIGQ9Ik04My4xMzMgMzkuNTA4SDg2LjcwMjk5OTk5OTk5OTk5VjQzLjA3Mkg4My4xMzN6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTAuMzc2IDg0LjkyNyA0MS4yOTQpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik04OS45MiA0NC4zOTVIOTMuNDlWNDcuOTU5SDg5LjkyeiIgdHJhbnNmb3JtPSJyb3RhdGUoLTEwLjM5IDkxLjcgNDYuMTcpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNEMERBMzMiIGQ9Ik04NS4wMTQgNDQuOTg0SDg3Ljc5NFY0Ny43NThIODUuMDE0eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTEwLjM4MiA4Ni40MTMgNDYuMzc1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjQjFBRUIzIiBkPSJNOTAuMzM0IDUwLjE2OUg5My4xMTRWNTIuOTQzOTk5OTk5OTk5OTk2SDkwLjMzNHoiIHRyYW5zZm9ybT0icm90YXRlKC0xMC4zODIgOTEuNzMzIDUxLjU2KSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNODAuOTE3IDQ2LjA5NEg4My42OTgwMDAwMDAwMDAwMVY0OC44NjlIODAuOTE3eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTEwLjM4MiA4Mi4zMTUgNDcuNDg1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNODUuODggNDkuNjY5SDg4LjY2VjUyLjQ0Mzk5OTk5OTk5OTk5Nkg4NS44OHoiIHRyYW5zZm9ybT0icm90YXRlKC0xMC4zODIgODcuMjggNTEuMDYpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNCMUFFQjMiIGQ9Ik04Mi4zMjkgNTAuMDhIODQuMjg1VjUyLjAzMkg4Mi4zMjl6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTAuMzkgODMuMzE0IDUxLjA2NikiLz4KICAgICAgPHBhdGggZmlsbD0iIzU4Qjc1RSIgZD0iTTg2LjAyNCA1NC4wNUg4Ny45NzlWNTYuMDAxSDg2LjAyNHoiIHRyYW5zZm9ybT0icm90YXRlKC0xMC4zNiA4Ny4wMSA1NS4wMzMpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMyOTM2N0IiIGQ9Ik0xMDEuNTcyIDUyLjM0Mkw5OS42NTkgNTYuMzU0IDEwMy42NzkgNTguMjYyIDEwNS41OSA1NC4yNTEiLz4KICAgICAgPHBhdGggZmlsbD0iIzI3QjhCRSIgZD0iTTk1Ljg2NyA1MC40ODlMOTQuMzMzIDUzLjcwNyA5Ny41NTcgNTUuMjM4IDk5LjA5MSA1Mi4wMiIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNOTguNTA1IDU4LjQxNkw5Ni45NzEgNjEuNjM1IDEwMC4xOTYgNjMuMTY1IDEwMS43MyA1OS45NDciLz4KICAgICAgPHBhdGggZmlsbD0iI0QwREEzMyIgZD0iTTk0LjI4IDU2LjAwMkw5My4wODYgNTguNTA4IDk1LjU5NyA1OS43IDk2Ljc5MiA1Ny4xOTQiLz4KICAgICAgPHBhdGggZmlsbD0iI0QwREEzMyIgZD0iTTk1LjU1NSA2My4zMTVMOTQuMzYgNjUuODIxIDk2Ljg3IDY3LjAxMyA5OC4wNjYgNjQuNTA3Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMzMDg4QzgiIGQ9Ik05MC4zMDYgNTQuNTFMODkuMTExIDU3LjAxNiA5MS42MjIgNTguMjA4IDkyLjgxNyA1NS43MDIiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTkyLjIzNyA2MC4zMDhMOTEuMDQyIDYyLjgxNCA5My41NTIgNjQuMDA2IDk0Ljc0OCA2MS41Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik04OS4yMTcgNTguNTQxTDg4LjM3NiA2MC4zMDQgOTAuMTQyIDYxLjE0MiA5MC45ODMgNTkuMzgiLz4KICAgICAgPHBhdGggZmlsbD0iIzI3QjhCRSIgZD0iTTg5LjM3MiA2NC4yNDFIOTEuMzI0VjY2LjE5Nkg4OS4zNzJ6IiB0cmFuc2Zvcm09InJvdGF0ZSgtNjQuNTUyIDkwLjM0MiA2NS4yMTcpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMzMDg4QzgiIGQ9Ik0xMDMuNzM3IDcxLjU1MUw5OS44MzUgNzMuNjg3IDEwMS45NzYgNzcuNTgyIDEwNS44NzggNzUuNDQ2Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik0xMDAuMTk4IDY2LjcxN0w5Ny4wNjggNjguNDMxIDk4Ljc4NSA3MS41NTUgMTAxLjkxNSA2OS44NDEiLz4KICAgICAgPHBhdGggZmlsbD0iIzI3QjhCRSIgZD0iTTk3LjY5MSA3NC42ODZMOTQuNTYgNzYuNCA5Ni4yNzggNzkuNTI1IDk5LjQwOCA3Ny44MTEiLz4KICAgICAgPHBhdGggZmlsbD0iIzI5MzY3QiIgZD0iTTk1LjY3OSA3MC4yNjFMOTMuMjQyIDcxLjU5NiA5NC41NzggNzQuMDI4IDk3LjAxNyA3Mi42OTQiLz4KICAgICAgPHBhdGggZmlsbD0iIzU4Qjc1RSIgZD0iTTkyLjQyNiA3Ni45MzZMODkuOTg4IDc4LjI3MSA5MS4zMjUgODAuNzAzIDkzLjc2MyA3OS4zNjkiLz4KICAgICAgPHBhdGggZmlsbD0iIzFFMzg3MSIgZD0iTTkzLjMzMSA2Ni43MzFMOTAuODkzIDY4LjA2NSA5Mi4yMyA3MC40OTkgOTQuNjY5IDY5LjE2NCIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNOTEuNDk4IDcyLjU2TDg5LjA2IDczLjg5NSA5MC4zOTcgNzYuMzI3IDkyLjgzNSA3NC45OTMiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTkwLjA4NCA2OS4zNjRMODguMzY5IDcwLjMwMyA4OS4zMSA3Mi4wMTQgOTEuMDI0IDcxLjA3NiIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNODcuNDc1IDc0LjExNEw4NS43NiA3NS4wNTMgODYuNyA3Ni43NjQgODguNDE1IDc1LjgyNiIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNODkuNTI5IDg4LjFIOTMuOTcyVjkyLjU1MDk5OTk5OTk5OTk5SDg5LjUyOXoiIHRyYW5zZm9ybT0icm90YXRlKC04Mi45NTggOTEuNzQgOTAuMzIpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMxRTM4NzEiIGQ9Ik05MC40MjQgODIuMTdIOTMuOTg4Vjg1Ljc0SDkwLjQyNHoiIHRyYW5zZm9ybT0icm90YXRlKC04Mi45MzUgOTIuMjEgODMuOTU1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNODMuNzE5IDg3LjE2OUg4Ny4yODI5OTk5OTk5OTk5OVY5MC43NEg4My43MTl6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODIuOTM1IDg1LjUwNCA4OC45NTUpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik04NS41MTYgODIuNDU5SDg4LjI5MTAwMDAwMDAwMDAxVjg1LjIzOUg4NS41MTZ6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODIuOTUyIDg2LjkxMiA4My44NTIpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNCMUFFQjMiIGQ9Ik03OC45NjYgODUuOTdIODEuNzQxVjg4Ljc1SDc4Ljk2NnoiIHRyYW5zZm9ybT0icm90YXRlKC04Mi45NTIgODAuMzYgODcuMzY1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjQjFBRUIzIiBkPSJNODUuNjgxIDc4LjIyNEg4OC40NTdWODEuMDA1MDAwMDAwMDAwMDFIODUuNjgxeiIgdHJhbnNmb3JtPSJyb3RhdGUoLTgyLjkzNSA4Ny4wNzIgNzkuNjE1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNODAuNzc4IDgxLjg4SDgzLjU1MzAwMDAwMDAwMDAxVjg0LjY2MUg4MC43Nzh6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODIuOTM1IDgyLjE2OCA4My4yNykiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTgyLjM3NyA3OC41MThIODQuMzI5VjgwLjQ3M0g4Mi4zNzd6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODIuOTQ2IDgzLjM2IDc5LjQ5OCkiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTc3LjQ3NiA4MC44NDZINzkuNDI4VjgyLjgwMkg3Ny40NzZ6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODIuOTUyIDc4LjQ1NSA4MS44MjcpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNEMERBMzMiIGQ9Ik03Ni42NTIgOTYuNTAyTDczLjM5IDkzLjQ3OSA3MC4zNjIgOTYuNzM1IDczLjYyNCA5OS43NTciLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTc2LjA1MSAzNC4yNzlMNzIuNzg5IDMxLjI1NiA2OS43NjEgMzQuNTEyIDczLjAyMyAzNy41MzQiLz4KICAgICAgPHBhdGggZmlsbD0iIzI3QjhCRSIgZD0iTTgwLjEzMyA5MS42MjVMNzcuNTE2IDg5LjIgNzUuMDg3IDkxLjgxMiA3Ny43MDQgOTQuMjM2Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik03MS43NjUgOTEuNzY0TDY5LjE0NyA4OS4zMzkgNjYuNzE4IDkxLjk1MSA2OS4zMzUgOTQuMzc1Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMzMDg4QzgiIGQ9Ik03NS4zMzcgODguNDYzTDczLjI5OSA4Ni41NzUgNzEuNDA4IDg4LjYwOCA3My40NDUgOTAuNDk2Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNEMERBMzMiIGQ9Ik02Ny45NjUgODcuNDg2TDY1LjkyOCA4NS41OTggNjQuMDM3IDg3LjYzMSA2Ni4wNzUgODkuNTIiLz4KICAgICAgPHBhdGggZmlsbD0iI0QwREEzMyIgZD0iTTc3Ljk1NCA4NS4xMjZMNzUuOTE2IDgzLjIzOCA3NC4wMjUgODUuMjcxIDc2LjA2MiA4Ny4xNTkiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTcxLjgzMyA4NS4yMjdMNjkuNzk1IDgzLjMzOSA2Ny45MDQgODUuMzcyIDY5Ljk0MSA4Ny4yNiIvPgogICAgICA8cGF0aCBmaWxsPSIjMUUzODcxIiBkPSJNNzQuNDI2IDgyLjg4MUw3Mi45OTMgODEuNTUyIDcxLjY2MyA4Mi45ODMgNzMuMDk2IDg0LjMxMSIvPgogICAgICA8cGF0aCBmaWxsPSIjQjFBRUIzIiBkPSJNNjkuMDg3IDgxLjkwN0w2Ny42NTQgODAuNTc5IDY2LjMyMyA4Mi4wMDkgNjcuNzU2IDgzLjMzNyIvPgogICAgICA8cGF0aCBmaWxsPSIjMzA4OEM4IiBkPSJNNTIuNzk3IDg4Ljg0OEg1Ny4yNDhWOTMuMjg5OTk5OTk5OTk5OTlINTIuNzk3eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTExLjMzMyA1NS4wMjIgOTEuMDcyKSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNNTkuNDM3IDg3LjcwOUg2My4wMDdWOTEuMjczSDU5LjQzN3oiIHRyYW5zZm9ybT0icm90YXRlKC0xMS4zMzMgNjEuMjA3IDg5LjQ5MykiLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTUyLjU2OSA4Mi45MzRINTYuMTM5Vjg2LjQ5Nzk5OTk5OTk5OTk5SDUyLjU2OXoiIHRyYW5zZm9ybT0icm90YXRlKC0xMS4zNDQgNTQuMzQgODQuNjk4KSIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNNTguMjYyIDgzLjA0OEg2MS4wNDJWODUuODIzMDAwMDAwMDAwMDFINTguMjYyeiIgdHJhbnNmb3JtPSJyb3RhdGUoLTExLjMzMyA1OS42NCA4NC40NCkiLz4KICAgICAgPHBhdGggZmlsbD0iIzI5MzY3QiIgZD0iTTYyLjM0IDgxLjg2OUg2NS4xMlY4NC42NDVINjIuMzR6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTEuMzMzIDYzLjcyIDgzLjI2MykiLz4KICAgICAgPHBhdGggZmlsbD0iIzMwODhDOCIgZD0iTTU3LjMxNyA3OC4zNzdINjAuMDk3VjgxLjE1Mkg1Ny4zMTd6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTEuMzMzIDU4LjY5NiA3OS43NykiLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTYxLjY5MyA3OC43MjRINjMuNjQ5VjgwLjY3Nkg2MS42OTN6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTEuMzE0IDYyLjY4MiA3OS43MSkiLz4KICAgICAgPHBhdGggZmlsbD0iI0IxQUVCMyIgZD0iTTU3LjkzNCA3NC44MTVINTkuODg4OTk5OTk5OTk5OTk2Vjc2Ljc2N0g1Ny45MzR6IiB0cmFuc2Zvcm09InJvdGF0ZSgtMTEuMzQ0IDU4LjkxNiA3NS43OTUpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik00NC4zODggNzguNzE1TDQ2LjIzMyA3NC42NzMgNDIuMTgyIDcyLjgzMSA0MC4zMzcgNzYuODczIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNEMERBMzMiIGQ9Ik01MC4xMjIgODAuNDc0TDUxLjYwMiA3Ny4yMzEgNDguMzUzIDc1Ljc1NCA0Ni44NzIgNzguOTk3Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMzMDg4QzgiIGQ9Ik00Ny4zNTEgNzIuNTkyTDQ4LjgzMiA2OS4zNDkgNDUuNTgyIDY3Ljg3MSA0NC4xMDIgNzEuMTE1Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik00OS41NCA3MS43MDhINTIuMzE2Vjc0LjQ4N0g0OS41NHoiIHRyYW5zZm9ybT0icm90YXRlKC02NS40ODUgNTAuOTMgNzMuMTAyKSIvPgogICAgICA8cGF0aCBmaWxsPSIjQjFBRUIzIiBkPSJNNTUuMDAyIDgxLjI0OUw1Ni4xNTUgNzguNzI0IDUzLjYyNSA3Ny41NzQgNTIuNDcyIDgwLjA5OSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjkzNjdCIiBkPSJNNDguMTQ1IDY0LjQxOEg1MC45MjEwMDAwMDAwMDAwMVY2Ny4xOTdINDguMTQ1eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTY1LjQ3NCA0OS41MzUgNjUuODA2KSIvPgogICAgICA8cGF0aCBmaWxsPSIjNThCNzVFIiBkPSJNNTMuNTM4IDczLjEzNEg1Ni4zMTM5OTk5OTk5OTk5OVY3NS45MTNINTMuNTM4eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTY1LjQ3NCA1NC45MjggNzQuNTIyKSIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNNTEuNTEyIDY3LjM2OUg1NC4yODhWNzAuMTQ4SDUxLjUxMnoiIHRyYW5zZm9ybT0icm90YXRlKC02NS40NTUgNTIuOTA1IDY4Ljc2MikiLz4KICAgICAgPHBhdGggZmlsbD0iIzFFMzg3MSIgZD0iTTU2LjYzNyA3Mi4zMTJMNTcuNDQ4IDcwLjUzNiA1NS42NjggNjkuNzI2IDU0Ljg1NyA3MS41MDMiLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTU1Ljg3OSA2Ni45NDhMNTYuNjkgNjUuMTcxIDU0LjkxIDY0LjM2MiA1NC4wOTkgNjYuMTM5Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik00MS45MDIgNTkuNTQ0TDQ1Ljc2OSA1Ny4zNDQgNDMuNTYzIDUzLjQ4NSAzOS42OTcgNTUuNjg1Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik00NS41MjIgNjQuMzJMNDguNjI0IDYyLjU1NSA0Ni44NTQgNTkuNDU5IDQzLjc1MyA2MS4yMjUiLz4KICAgICAgPHBhdGggZmlsbD0iIzFFMzg3MSIgZD0iTTQ3Ljg5NyA1Ni4zMUw1MC45OTkgNTQuNTQ1IDQ5LjIyOSA1MS40NDggNDYuMTI4IDUzLjIxNCIvPgogICAgICA8cGF0aCBmaWxsPSIjMzA4OEM4IiBkPSJNNDkuOTgyIDYwLjcwMUw1Mi4zOTYgNTkuMzI2IDUxLjAxOSA1Ni45MTYgNDguNjA0IDU4LjI5Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik01My4xMjQgNTMuOTc0TDU1LjUzOCA1Mi41OTkgNTQuMTYxIDUwLjE4OSA1MS43NDYgNTEuNTYzIi8+CiAgICAgIDxwYXRoIGZpbGw9IiMyN0I4QkUiIGQ9Ik01Mi4zODcgNjQuMTkyTDU0LjgwMyA2Mi44MTggNTMuNDI2IDYwLjQwNyA1MS4wMSA2MS43ODIiLz4KICAgICAgPHBhdGggZmlsbD0iI0QwREEzMyIgZD0iTTU0LjEyNCA1OC4zMzRMNTYuNTM5IDU2Ljk2IDU1LjE2MiA1NC41NDkgNTIuNzQ3IDU1LjkyNCIvPgogICAgICA8cGF0aCBmaWxsPSIjQjFBRUIzIiBkPSJNNTUuNTkxIDYxLjUwNkw1Ny4yOSA2MC41MzkgNTYuMzIxIDU4Ljg0NCA1NC42MjIgNTkuODEiLz4KICAgICAgPHBhdGggZmlsbD0iIzcxQkE0NCIgZD0iTTU4LjEyIDU2LjcxM0w1OS44MiA1NS43NDYgNTguODUxIDU0LjA1MSA1Ny4xNTEgNTUuMDE4Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiM3MUJBNDQiIGQ9Ik01MS4zNTQgMzguMzVINTUuNzk2VjQyLjgwMDAwMDAwMDAwMDAwNEg1MS4zNTR6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODMuODk4IDUzLjU3OCA0MC41NzYpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNCMUFFQjMiIGQ9Ik01MS40NDUgNDUuMTY2SDU1LjAwOFY0OC43MzY5OTk5OTk5OTk5OTVINTEuNDQ1eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTgzLjg5MiA1My4yMjcgNDYuOTUzKSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNNTguMDY2IDQwLjA1N0g2MS42M1Y0My42MjhINTguMDY2eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTgzLjg5MiA1OS44NDggNDEuODQ0KSIvPgogICAgICA8cGF0aCBmaWxsPSIjRDBEQTMzIiBkPSJNNTcuMTQyIDQ1LjU4MUg1OS45MTdWNDguMzYxMDAwMDAwMDAwMDA0SDU3LjE0MnoiIHRyYW5zZm9ybT0icm90YXRlKC04My44ODYgNTguNTMzIDQ2Ljk3MikiLz4KICAgICAgPHBhdGggZmlsbD0iIzMwODhDOCIgZD0iTTYzLjYzNCA0MS45NjFINjYuNDA5VjQ0Ljc0MUg2My42MzR6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODMuOTEgNjUuMDE2IDQzLjM1KSIvPgogICAgICA8cGF0aCBmaWxsPSIjMjdCOEJFIiBkPSJNNTcuMDQ3IDQ5LjgxOEg1OS44MjE5OTk5OTk5OTk5OTZWNTIuNTk4SDU3LjA0N3oiIHRyYW5zZm9ybT0icm90YXRlKC04My44ODYgNTguNDM1IDUxLjIxKSIvPgogICAgICA8cGF0aCBmaWxsPSIjNzFCQTQ0IiBkPSJNNjEuODg5IDQ2LjA4SDY0LjY2NFY0OC44Nkg2MS44ODl6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODMuODg2IDYzLjI3OCA0Ny40NykiLz4KICAgICAgPHBhdGggZmlsbD0iIzFFMzg3MSIgZD0iTTYxLjE3NiA1MC4yODdINjMuMTI4VjUyLjI0M0g2MS4xNzZ6IiB0cmFuc2Zvcm09InJvdGF0ZSgtODMuODkyIDYyLjE1MyA1MS4yNjYpIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNCMUFFQjMiIGQ9Ik02Ni4wMzkgNDcuODc3SDY3Ljk5MVY0OS44MzRINjYuMDM5eiIgdHJhbnNmb3JtPSJyb3RhdGUoLTgzLjkyNyA2Ny4wMTYgNDguODU0KSIvPgogICAgICA8cGF0aCBmaWxsPSIjNzI3QTgyIiBkPSJNODYuOTQxIDY4LjIzNWMtMi4zMy0xLjM0Mi01LjU3Mi0xLjczMi04LjkzMS0wLjUwMiAtMS40NjggMC41NTUtMi45MzggMS41MjQtNC4xNzggMi40NzMgLTAuNzgxLTQuNzM1LTAuNC05LjEzLTAuMjE4LTExLjI4OSAwLjAwMS0wLjAxMiAwLjAxNS0wLjAxOCAwLjAyNi0wLjAxMSAxLjY3NyAxLjA1NSAxLjIwNyA0LjAwMyAwLjg1NSA0Ljg0NiAtMC4wMDcgMC4wMTcgMC4wMTggMC4wMjggMC4wMyAwLjAxNCAyLjA5LTIuNDY4IDEuMDY5LTUuMTkzIDAuNjQtNS44ODMgLTAuMDc4LTAuMTI1IDAuMzk1IDAuMjU0IDAuNzgzIDAuNzUxIDEuNDYxIDEuODYgMC43ODYgMy45NDkgMC45NDkgMy45IDAuMDA0LTAuMDAxIDAuMDA5IDAgMC4wMTEtMC4wMDUgMC45NzEtMS45MDUgMC42NTktNC4zMjEtMS4zMzgtNi4wNjYgLTAuMDkxLTAuMDc3IDAuMjY1IDAuMDM5IDAuMzc4IDAuMDc5IDEuNzAzIDAuNTkxIDIuNTkxIDIuMzQ1IDIuNTc5IDMuOTA5IDAgMC4zNDQgMS4xNS0yLjkzOC0xLjYzLTQuNjA2IC0wLjUyLTAuMzExLTEuMDU0LTAuNDgyLTEuNDAzLTAuNTI0IC0wLjI3Mi0wLjAyOSAxLjQ4OS0wLjI5NCAyLjcyNiAwLjU0NCAwLjc0MyAwLjUwMSAwLjkzOCAxLjEwNyAwLjkxOSAwLjkzNyAtMC4yMTYtMi4xOTctMi44MDYtMy4wNjUtNC4zNzYtMi40MDYgLTAuMTY2IDAuMDgzIDAuNjE4LTEuMDc5IDIuMTM0LTAuOTg5IDAuMjkyIDAuMDE3IDAuNTYyIDAuMDggMC43NzggMC4xODMgMC4wMTUgMC4wMDcgMC4wMjktMC4wMTMgMC4wMTgtMC4wMjYgLTEuMTQ1LTEuMzA5LTMuMDI5LTEuMzM2LTQuMDI5IDAuMTc4IC0wLjAwNyAwLjAxLTAuMDIyIDAuMDEtMC4wMjggMCAtMC4zNzktMC42NzktMC42OTYtMS41NDgtMC44MzMtMi4zNjggLTAuMDMzLTAuMjEtMC4xMDMgMS4wMTUtMC44NjMgMi4zNjggLTAuMDA2IDAuMDEtMC4wMiAwLjAxLTAuMDI3IDAgLTEuMDAzLTEuNTE4LTIuODg1LTEuNDg4LTQuMDI5LTAuMTc4IC0wLjAxMiAwLjAxMyAwLjAwMiAwLjAzMyAwLjAxOCAwLjAyNiAwLjc2NC0wLjM2MyAyLjIwNy0wLjI1NiAyLjkzIDAuNzgxIDAuMDA5IDAuMDE0LTAuMDA0IDAuMDMyLTAuMDIgMC4wMjUgLTEuNjE4LTAuNjgtNC4xNiAwLjI0My00LjM3NSAyLjQwNiAtMC4wMDEgMC4wMTggMC4wMjMgMC4wMjggMC4wMzIgMC4wMTIgMC4wNzItMC4xMzUgMC4yNS0wLjQyMyAwLjU4My0wLjcxNSAxLjI5NC0xLjE0IDMuMzI5LTAuODEgMy4wMy0wLjc3OCAtMC43OTUgMC4wOTgtMi40MjcgMC44MDYtMy4wMyAyLjQyNCAtMC40OTMgMS4zMjItMC4wMTggMy4wNjMgMCAyLjYzMiAwLjAxNi0xLjQ3MSAwLjg1OS0zLjQ0MSAyLjk0LTMuOTQzIDAuMDE2LTAuMDA0IDAuMDI4IDAuMDE4IDAuMDE1IDAuMDI5IC0zLjIzNCAyLjg0My0xLjI3OCA2LjMzNC0xLjMwOCA2LjA1OCAtMC4xLTEuMTI3LTAuMTgzLTMuMTM5IDEuNjg2LTQuNjU4IDAuMDE0LTAuMDExIDAuMDM2IDAuMDA0IDAuMDI2IDAuMDIgLTAuNDI5IDAuNjktMS40NDkgMy40MTUgMC42NCA1Ljg4MyAwLjAxMiAwLjAxNCAwLjAzNyAwLjAwMyAwLjAzLTAuMDE0IC0wLjM1MS0wLjg0My0wLjgyMS0zLjc5MSAwLjg1NS00Ljg0NiAwLjAxMS0wLjAwNyAwLjAyNS0wLjAwMSAwLjAyNiAwLjAxMSAwLjE4MyAyLjE1OSAwLjU2NCA2LjU1NC0wLjIxOCAxMS4yODkgLTIuNjU2LTIuMDMtNS4yNzEtMy4zNjEtOC42MzktMy4yMTMgLTEuNjk0IDAuMDc0LTMuMzAxIDAuNTY3LTQuNDcgMS4yNDIgLTAuMDQyIDAuMDI0LTAuMDExIDAuMDg1IDAuMDM0IDAuMDcxIDQuODk5LTEuNTY2IDkuMTM5IDAuMzM0IDEzLjA4MSAzLjYxNCAtMS45OTEgMS43MzUtMy43OTggMy41NTEtNC44NDggNC4wOTkgLTAuMjQ1LTAuMzM1LTAuNjctMC41MjgtMS4xMzUtMC40MjcgLTAuODc2IDAuMTkzLTEuMDg1IDEuMjktMC42MSAxLjc2MiAxLjcyMSAxLjcxNyA0LjQxMi0xLjY5IDcuNjMxLTQuNTM4IDMuMDk4IDIuNzM4IDUuOTEzIDYuMjU0IDcuNjMxIDQuNTM4IDAuMTM3LTAuMTM3IDAuMjk2LTAuNTg5IDAuMjE0LTAuOTQ4IC0wLjIwNy0wLjg5Ni0xLjM5OC0xLjE1NS0xLjk1OS0wLjM4NyAtMS4wMS0wLjUwOS0yLjc4My0yLjMwMS00Ljg0OC00LjA5OSAzLjk3LTMuMzA5IDguMTY0LTUuMTU2IDEzLjA4LTMuNjE0Qzg2Ljk1MiA2OC4zMiA4Ni45ODMgNjguMjU5IDg2Ljk0MSA2OC4yMzUiLz4KICAgICAgPHBhdGggZmlsbD0iI0FEQTlBRSIgZD0iTTcxLjI2NSAxMTUuMTA4aDEuMjc3di0xMS40MzZoLTEuMjc3VjExNS4xMDh6TTM3LjgwNCAxMTMuODMzbC0xLjk5NS00Ljg5MWMyLjA2NC0xLjc0NyA0LjYyNS0xLjQyNiA2LjI3MyAwbC0xLjk5NSA0Ljg5MUgzNy44MDR6TTMwLjc2NCAxMTMuODMzYy0xLjAwNC0wLjAzLTEuNzEgMC4wOTUtMi42NDItMC4xOTggLTMuNDUxLTEuMDktMi41MTMtNS44ODggMS4zNDktNS44ODhoMS4yOTNWMTEzLjgzM3pNNjYuMjY4IDExMy44MzNjLTIuMDU3LTAuMDYzLTMuOTEgMC4zNjMtNC44NTMtMS4yNzQgMC4xODYtMC44MTggMC4wODQtMS41NTIgMC4xMTItNS4zMDZINjAuMjV2NC4zMThjMCAzLjE2OS0zLjgyNCAyLjk2My00LjcyNiAxLjA2IC0wLjM2Mi0wLjc2NS0wLjE0MS0xLjA4NS0wLjIwNy01LjM3OGgtMS4yNzh2NC40MTRjMCAxLjQ0LTAuOTAxIDIuMTY2LTIuMTU1IDIuMTY2SDQ5LjQxdi02LjU4aC0xLjI3N3Y2LjU4aC02LjcwNWwyLjIzNS01LjMzN2MtMS4yNjgtMS4xMDgtMy4wMzMtMi4xNTEtNC43MjUtMi4xNTEgLTEuNzE5IDAtMy40NSAwLjk5OC00LjcyNiAyLjE1MWwyLjI1MSA1LjMzN2gtNC40MjJ2LTcuMzc2aC0yLjA0M2MtMi44ODggMC01LjI4NSAxLjY2LTUuMjg1IDQuMzgxIDAgNC44NDMgNS45NDEgNC4yNDYgNi4wNTEgNC4yNyAtMC4wMiAwLjE1NyAwLjE1OSAxLjI1MS0wLjU3NSAxLjgwMSAtMC42ODYgMC41MTQtMS45MTEgMC40OTktMi42NzQgMC4zMTkgLTAuMzE0LTAuMDc1LTAuNjczLTAuMjAyLTEuMDc3LTAuMzgzbC0wLjM5OSAxLjIyN2MwLjgxIDAuMjk4IDEuNTgzIDAuNTQyIDIuNDQyIDAuNTQyIDIuNDM0IDAgMy41Ni0xLjIxNCAzLjU2LTMuMjY3di0wLjIzOWMyMC44NDItMC4xMzEgMjAuMjI2IDAuMyAyMS40OTYtMC4zOTggMC40ODQtMC4yNjUgMC44NzUtMC42MjEgMS4xNzMtMS4wNjggMC4zMDkgMC41MSAwLjcyOSAwLjkwOSAxLjI2MSAxLjE5NiAxLjExNyAwLjU5OSAyLjgyMSAwLjU0MyAzLjg1NiAwLjAzMSAwLjUzNy0wLjI2NSAwLjk1LTAuNjc0IDEuMjM3LTEuMjI3IDAuNDkzIDAuODQyIDEuMjU4IDEuMzgzIDIuNzk0IDEuNDUxdjAuMDE1aDMuNjg3di0xMS40MzZoLTEuMjc3VjExMy44MzN6TTE4MC44NTggMTEzLjI2OGMtMS4xMyAyLjY0MS01LjAyIDIuNzE3LTYuMTQ2LTAuMDQgLTAuMzMxLTAuODA5LTAuMzMxLTEuNzY4IDAtMi41ODkgMS4zNjMtMy4zNzggNi40MS0yLjQwOCA2LjQxIDEuMjk5QzE4MS4xMjIgMTEyLjQxNSAxODEuMDM0IDExMi44NTkgMTgwLjg1OCAxMTMuMjY4TTE2OC40NyAxMTMuMjY4Yy0wLjk3NyAyLjI3LTMuOTIxIDIuNjA2LTUuNDYgMS4wMiAtMS4yNjMtMS4zMDYtMS4yMjYtMy40MzMtMC4wMDctNC43MTYgMC45OTMtMS4wNTUgMi41MjQtMS4yMjUgMy42OTUtMC43NDJDMTY4LjU0NCAxMDkuNiAxNjkuMTU5IDExMS42NjcgMTY4LjQ3IDExMy4yNjhNMTM3LjQxMiAxMTMuODMzYy0wLjk3Ny0wLjAzLTEuNjg1IDAuMDk4LTIuNjExLTAuMjA2IC0zLjM2My0xLjEwNS0yLjU2MS01Ljg5NiAxLjM0OS01Ljg5NmgxLjI2MlYxMTMuODMzek0xODYuMzg5IDExMy44MzNIMTgyYzEuMzctMy4wMDctMC43NTgtNi41MzItNC4yNjMtNi41MzIgLTMuMjI4IDAtNS40ODYgMy4zMDgtNC4xNjcgNi41MzJoLTMuOTU5YzEuMzM1LTIuOTE5LTAuNjg4LTYuNTMyLTQuMjYyLTYuNTMyIC0zLjIzIDAtNS40ODYgMy4zMDktNC4xNjcgNi41MzJoLTQuMDU1di0xMC4xNjFoLTEuMjc3djEwLjE2MWgtNC4wN2MtMC4wNy0xLjMwOSAwLjI5Ny0zLjI0Ni0wLjc5OS00LjQ2OSAtMC43NDMtMC44MzgtMS41Ny0xLjA5OS0yLjY5OC0xLjA5OWgtNS42NTFsMi40MDQtNC41OTNoLTEuMzg5bC0yLjQ1MiA0LjU3N2MwLjA3OSAwLjUwOCAwLjIzMyAwLjkwNSAwLjU3NSAxLjI5IDYuMzg3IDAuMDU0IDYuODA0LTAuMTM0IDcuNTU5IDAuMTg0IDAuNTkyIDAuMjQ1IDAuOTUzIDAuNjkyIDEuMDc4IDEuMjM1IDAuMTUyIDAuNjU0IDAuMDc1IDEuMTQ2IDAuMDk2IDIuODc1aC0xMS44MTR2LTcuMzc2aC0yLjAxMmMtMy4zODQgMC01LjI2OCAyLjAxMy01LjI2OCA0LjMzMyAwIDIuOTA3IDIuMzM4IDQuMzE4IDUuMjY4IDQuMzE4aDI1LjMzNWMxLjg3OSAyLjAyNCA1LjA0MiAxLjg1MiA2Ljc2OSAwaDUuNjE5YzEuODczIDIuMDE4IDUuMDMzIDEuODU5IDYuNzcgMGg2LjQ5N3YtMTEuNDM2aC0xLjI3OFYxMTMuODMzek0xOTEuMzg2IDExNS4xMDhoMS4yNzd2LTExLjQzNmgtMS4yNzdWMTE1LjEwOHpNOTcuMjg4IDExNy45MTRIOTguNnYtMS4zMDloLTEuMzEyVjExNy45MTR6TTEwOS43NzQgMTEzLjgzM2wtMS45OTYtNC44OTFjMi4wNDgtMS43MzQgNC42MDUtMS40NDEgNi4yNzQgMGwtMS45OTUgNC44OTFIMTA5Ljc3NHpNMTE4LjgyNSAxMTMuODMzaC01LjQyN2wyLjIzNC01LjMzN2MtMS4yNzEtMS4xMTQtMy4wNDItMi4xNTEtNC43MjUtMi4xNTEgLTEuNzI1IDAtMy40NTEgMS4wMDMtNC43MjYgMi4xNTFsMi4yNTEgNS4zMzdoLTQuNzU2di03LjM3NmgtMS4yNzh2OC45MjJjMCAxLjEyNy0wLjA4MiAxLjk2LTEuMjEzIDEuOTYgLTAuMjYzIDAtMC40MDItMC4wMjMtMC42NTQtMC4wOTZsLTAuMzM1IDEuMjI4YzEuMDY3IDAuMjkyIDIuMzI3IDAuMTk0IDIuOTUzLTAuNzI2IDAuNTY2LTAuODMzIDAuNDk5LTEuOTgzIDAuNTI3LTIuNjM3aDE2LjQyN3YtMTEuNDM2aC0xLjI3OFYxMTMuODMzek0yMS44NzIgMTA3LjU3MmMtMS40Mi0xLjU1LTMuMDY0LTAuOTg4LTMuNjI0LTEuMTE1djEuMjc0YzAuOTMyIDAuMDM2IDEuMzYzLTAuMTAzIDEuOTk1IDAuMTk5IDAuNTMyIDAuMjU2IDAuOTA4IDAuNjY5IDEuMDYyIDEuMjUxIDAuMTczIDAuNjY5IDAuMDc2IDEuMTkxIDAuMTA0IDQuNjUyaC01Ljk4N3YxLjI3NWg3LjI2NGMtMC4wNTMtNC44MyAwLjEzMi01LjM0Mi0wLjItNi40MjFDMjIuMzUzIDEwOC4yNTIgMjIuMTQ4IDEwNy44OCAyMS44NzIgMTA3LjU3Mk05Mi42MTkgMTE3LjkyOWgxLjMxMnYtMS4zMDloLTEuMzEyVjExNy45Mjl6TTg0Ljg1NCAxMTMuODMzYy0wLjk3NS0wLjAzLTEuNjg0IDAuMDk4LTIuNjExLTAuMjA2IC0zLjM2Ny0xLjEwNi0yLjU1Ni01Ljg5NiAxLjM0OS01Ljg5NmgxLjI2MlYxMTMuODMzek05OC41ODMgMTA2LjQ1N2gtMS4yNzd2Ny4zNzZoLTQuODIxdi03LjM3NmgtMS4yNzd2Ny4zNzZoLTUuMDc3di03LjM3NmMtMS42MDYgMC4wNS00LjAwMi0wLjMyNS01Ljg0MyAxLjIzNCAtMi42MSAyLjIxMS0xLjkzNyA3LjQxNyAzLjgzMiA3LjQxN2gxNC40NjNWMTA2LjQ1N3pNOTAuMzgyIDExNy45MjloMS4zMTJ2LTEuMzA5aC0xLjMxMlYxMTcuOTI5ek01LjAzNyAxMDMuNjcySDMuNzI1djEuMzA5aDEuMzEyVjEwMy42NzJ6TTEzNi40NDYgMTAzLjY3MmgtMS4zMTJ2MS4zMDloMS4zMTJWMTAzLjY3MnpNODYuMTI1IDEwMy42NzJoLTEuMzEydjEuMzA5aDEuMzEyVjEwMy42NzJ6TTEyLjU3MSAxMTcuOTI5aDEuMzEydi0xLjMwOWgtMS4zMTJWMTE3LjkyOXpNODMuODg4IDEwMy42NzJoLTEuMzEydjEuMzA5aDEuMzEyVjEwMy42NzJ6TTcuMjc0IDEwMy42NzJINS45NjJ2MS4zMDloMS4zMTJWMTAzLjY3MnpNMTAuMzM0IDExNy45MjloMS4zMTJ2LTEuMzA5aC0xLjMxMlYxMTcuOTI5ek02LjAwMyAxMTMuODMzYy0wLjk3My0wLjAzLTEuNjg2IDAuMDk4LTIuNjEtMC4yMDYgLTMuMzYxLTEuMTAyLTIuNTY3LTUuODk2IDEuMzQ5LTUuODk2aDEuMjYxVjExMy44MzN6TTEzLjYzNCAxMDYuNDU3aC0xLjI3N3Y3LjM3Nkg3LjI4di03LjM3NmMtMS41MzEgMC4wNDctMi43NDgtMC4xNTMtNC4xODMgMC4zMjYgLTEuMjAzIDAuNDA0LTIuMTg2IDEuMTQ3LTIuNzIyIDIuMjg3IC0wLjU1OCAxLjE4Ni0wLjQ1NyAyLjY5NiAwLjA1NyAzLjY2NCAwLjkyNSAxLjc0NiAyLjg2IDIuMzc0IDQuODM2IDIuMzc0aDguMzY2VjEwNi40NTd6TTEyMy44MjIgMTE1LjEwOGgxLjI3N3YtMTEuNDM2aC0xLjI3N1YxMTUuMTA4ek0xMzguNjgyIDEwMy42NzJoLTEuMzEydjEuMzA5aDEuMzEyVjEwMy42NzJ6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xLjI1MSAxMjMuNDg0TDIuODU0IDEyMy40ODQgMi44NTQgMTI4LjA2MiA3LjE5MyAxMjMuNDg0IDkuMTYxIDEyMy40ODQgNS4zNjkgMTI3LjM5OSA5LjMzIDEzMi41ODggNy4zODkgMTMyLjU4OCA0LjI3NSAxMjguNDkxIDIuODU0IDEyOS45NDggMi44NTQgMTMyLjU4OCAxLjI1MSAxMzIuNTg4Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xMC43OTIgMTIzLjQ4NEgxMi4zOTVWMTMyLjU4OEgxMC43OTJ6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xNC44NjMgMTIzLjQ4NEwxNi4zNDkgMTIzLjQ4NCAyMS4yMzYgMTI5Ljc3OSAyMS4yMzYgMTIzLjQ4NCAyMi44MTIgMTIzLjQ4NCAyMi44MTIgMTMyLjU4OCAyMS40NyAxMzIuNTg4IDE2LjQ0IDEyNi4xMTEgMTYuNDQgMTMyLjU4OCAxNC44NjMgMTMyLjU4OCIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMjQuNzk3IDEyOC4wNjJ2LTAuMDI2YzAtMi41NDkgMS45NTUtNC43MDkgNC43MDQtNC43MDkgMS41OSAwIDIuNTY4IDAuNDQzIDMuNTA2IDEuMjM2bC0xLjAxNiAxLjIxYy0yLjQ3LTIuMDk4LTUuNTEyLTAuNTg3LTUuNTEyIDIuMjM3djAuMDI2YzAgMS44NzMgMS4yMzcgMy4yNTEgMy4xIDMuMjUxIDAuODYxIDAgMS42NDMtMC4yNzMgMi4yMDMtMC42ODl2LTEuNzA0aC0yLjMzM3YtMS4zOTFoMy44ODR2My44MjNDMzAuMDcxIDEzNC4xMTMgMjQuNzk3IDEzMi42ODEgMjQuNzk3IDEyOC4wNjIiLz4KICAgICAgPHBhdGggZmlsbD0iI0FEQTlBRSIgZD0iTTM4Ljk0OCAxMzEuMTMxYzQuMjU0IDAgNC4yMDMtNi4xOTEgMC02LjE5MUgzNy4xNXY2LjE5MUgzOC45NDh6TTM1LjU0NyAxMjMuNDg0aDMuNDAxYzYuNTA4IDAgNi40MiA5LjEwNCAwIDkuMTA0aC0zLjQwMVYxMjMuNDg0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNNTMuMTU1IDEyOC4wNjJ2LTAuMDI2YzAtMS43NjktMS4yOS0zLjIzOC0zLjEwMi0zLjIzOCAtMS44MTEgMC0zLjA3NSAxLjQ0My0zLjA3NSAzLjIxMnYwLjAyNmMwIDEuNzY5IDEuMjkgMy4yMzkgMy4xMDEgMy4yMzlDNTEuODkxIDEzMS4yNzUgNTMuMTU1IDEyOS44MzEgNTMuMTU1IDEyOC4wNjJNNDUuMjk3IDEyOC4wNjJ2LTAuMDI2YzAtMi41NjIgMS45ODEtNC43MDkgNC43ODItNC43MDkgMi44MDIgMCA0Ljc1NyAyLjEyMSA0Ljc1NyA0LjY4M3YwLjAyNmMwIDIuNTYyLTEuOTggNC43MDgtNC43ODMgNC43MDhDNDcuMjUyIDEzMi43NDQgNDUuMjk3IDEzMC42MjQgNDUuMjk3IDEyOC4wNjIiLz4KICAgICAgPHBhdGggZmlsbD0iI0FEQTlBRSIgZD0iTTU2LjgyNyAxMjMuNDg0TDU4LjUzNCAxMjMuNDg0IDYxLjMxIDEyNy43ODkgNjQuMDg1IDEyMy40ODQgNjUuNzkyIDEyMy40ODQgNjUuNzkyIDEzMi41ODggNjQuMTg5IDEzMi41ODggNjQuMTg5IDEyNi4wNTkgNjEuMzEgMTMwLjM1MSA2MS4yNTggMTMwLjM1MSA1OC40MDQgMTI2LjA4NSA1OC40MDQgMTMyLjU4OCA1Ni44MjcgMTMyLjU4OCIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNNzkuNTA2IDEyOC4wNjJ2LTAuMDI2YzAtMS43NjktMS4yOS0zLjIzOC0zLjEwMi0zLjIzOCAtMS44MTEgMC0zLjA3NSAxLjQ0My0zLjA3NSAzLjIxMnYwLjAyNmMwIDEuNzY5IDEuMjkgMy4yMzkgMy4xMDEgMy4yMzlDNzguMjQyIDEzMS4yNzUgNzkuNTA2IDEyOS44MzEgNzkuNTA2IDEyOC4wNjJNNzEuNjQ4IDEyOC4wNjJ2LTAuMDI2YzAtMi41NjIgMS45ODEtNC43MDkgNC43ODItNC43MDkgMi44MDIgMCA0Ljc1NyAyLjEyMSA0Ljc1NyA0LjY4M3YwLjAyNmMwIDIuNTYyLTEuOTgxIDQuNzA4LTQuNzgzIDQuNzA4QzczLjYwMyAxMzIuNzQ0IDcxLjY0OCAxMzAuNjI0IDcxLjY0OCAxMjguMDYyIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik04My4xNzkgMTIzLjQ4NEw4OS45NjggMTIzLjQ4NCA4OS45NjggMTI0Ljk0MSA4NC43ODIgMTI0Ljk0MSA4NC43ODIgMTI3LjQyNSA4OS4zODIgMTI3LjQyNSA4OS4zODIgMTI4Ljg4MSA4NC43ODIgMTI4Ljg4MSA4NC43ODIgMTMyLjU4OCA4My4xNzkgMTMyLjU4OCIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNOTUuMDI3IDEzMS4yNjJsMC45NjQtMS4xNDVjMC44NzMgMC43NTUgMS43NDYgMS4xODQgMi44OCAxLjE4NCAwLjk5IDAgMS42MTYtMC40NTUgMS42MTYtMS4xNDV2LTAuMDI1YzAtMi4wMzQtNS4wOTYtMC42NDYtNS4wOTYtNC4xMTF2LTAuMDI2YzAtMi43OTQgMy45MTEtMy41MDcgNi40MjUtMS40OTVsLTAuODYgMS4yMDljLTIuMDk4LTEuNTYxLTMuOTYxLTAuOTQ3LTMuOTYxIDAuMTQ0djAuMDI2YzAgMi4wMDUgNS4wOTUgMC43MzcgNS4wOTUgNC4wOTZWMTMwQzEwMi4wOSAxMzMuMTkyIDk3LjU2NCAxMzMuNTIxIDk1LjAyNyAxMzEuMjYyIi8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xMDkuMjk2IDEyOC45NzNsLTEuNTc3LTMuNjQyIC0xLjU2NCAzLjY0MkgxMDkuMjk2ek0xMDcuMDAyIDEyMy40MTloMS40ODVsNC4wMTQgOS4xNjloLTEuNjk0bC0wLjkyNS0yLjE5OGgtNC4zMTRsLTAuOTM3IDIuMTk4aC0xLjY0M0wxMDcuMDAyIDEyMy40MTl6Ii8+CiAgICAgIDxwYXRoIGZpbGw9IiNBREE5QUUiIGQ9Ik0xMTMuNDQ0IDEyOC43MjZ2LTUuMjQyaDEuNjAzdjUuMTc3YzAgMS42OTEgMC44NzMgMi42MDEgMi4zMDYgMi42MDEgMS40MjEgMCAyLjI5NC0wLjg1OCAyLjI5NC0yLjUzNnYtNS4yNDJoMS42MDN2NS4xNjRjMCAyLjcxOC0xLjUzOCA0LjA4NC0zLjkyMyA0LjA4NEMxMTQuOTU1IDEzMi43MzIgMTEzLjQ0NCAxMzEuMzY2IDExMy40NDQgMTI4LjcyNiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTI2Ljk5NyAxMzEuMTMxYzQuMjU0IDAgNC4yMDQtNi4xOTEgMC02LjE5MWgtMS43OTh2Ni4xOTFIMTI2Ljk5N3pNMTIzLjU5NiAxMjMuNDg0aDMuNDAxYzYuNTA4IDAgNi40MiA5LjEwNCAwIDkuMTA0aC0zLjQwMVYxMjMuNDg0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTMzLjg3NSAxMjMuNDg0SDEzNS40NzhWMTMyLjU4OEgxMzMuODc1eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTQ3LjM1MiAxMjguOTczbC0xLjU3Ny0zLjY0MiAtMS41NjQgMy42NDJIMTQ3LjM1MnpNMTQ1LjA1OCAxMjMuNDE5aDEuNDg1bDQuMDE0IDkuMTY5aC0xLjY5NGwtMC45MjUtMi4xOThoLTQuMzE0bC0wLjkzNyAyLjE5OGgtMS42NDNMMTQ1LjA1OCAxMjMuNDE5eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTU2LjAyIDEyNy45OTdjMS4xNDcgMCAxLjg3Ny0wLjU5OCAxLjg3Ny0xLjUyMnYtMC4wMjZjMC0wLjk3NS0wLjcwNC0xLjUwOS0xLjg5LTEuNTA5aC0yLjMzMnYzLjA1N0gxNTYuMDJ6TTE1Mi4wNzIgMTIzLjQ4NGg0LjA2NWMxLjkyOCAwIDMuMzg5IDAuOTY5IDMuMzg5IDIuODc0IC0wLjAzNyAwLjEgMC4xOSAyLjEwOC0yLjE3NyAyLjc4NGwyLjQ2MyAzLjQ0NmgtMS44OWwtMi4yNDEtMy4xNzRjLTAuMTc1IDAtMi4xMDkgMC0yLjAwNiAwdjMuMTc0aC0xLjYwM1YxMjMuNDg0eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTY3LjI5OSAxMjguOTczbC0xLjU3Ny0zLjY0MiAtMS41NjQgMy42NDJIMTY3LjI5OXpNMTY1LjAwNSAxMjMuNDE5aDEuNDg2bDQuMDEzIDkuMTY5aC0xLjY5NGwtMC45MjUtMi4xOThoLTQuMzE0bC0wLjkzNyAyLjE5OGgtMS42NDNMMTY1LjAwNSAxMjMuNDE5eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTc2LjI1MyAxMzEuMTcxYzEuMDk1IDAgMS43NTktMC40MyAxLjc1OS0xLjI0OXYtMC4wMjZjMC0wLjc2Ny0wLjYxMi0xLjIyMy0xLjg3Ni0xLjIyM2gtMi41NDF2Mi40OThIMTc2LjI1M3pNMTc1Ljc4NCAxMjcuMzIxYzEuMDI5IDAgMS43Mi0wLjQwMyAxLjcyLTEuMjM2di0wLjAyNmMwLTAuNzE1LTAuNTczLTEuMTU3LTEuNjAzLTEuMTU3aC0yLjMwNnYyLjQxOUgxNzUuNzg0ek0xNzIuMDE4IDEyMy40ODRoNC4wOTJjMS42MDQgMCAyLjk5NyAwLjc1IDIuOTk3IDIuMzE1IC0wLjAzNyAwLjEgMC4xNjQgMS4yOTQtMS4zMDMgMi4wNTUgMS4wNjkgMC4zNjQgMS44MTEgMC45NzYgMS44MTEgMi4yMTF2MC4wMjZjMCAxLjYyNi0xLjM0MiAyLjQ5Ny0zLjM3NSAyLjQ5N2gtNC4yMjJWMTIzLjQ4NHoiLz4KICAgICAgPHBhdGggZmlsbD0iI0FEQTlBRSIgZD0iTTE4MS42IDEyMy40ODRIMTgzLjIwM1YxMzIuNTg4SDE4MS42eiIvPgogICAgICA8cGF0aCBmaWxsPSIjQURBOUFFIiBkPSJNMTkxLjA0MSAxMjguOTczbC0xLjU3Ny0zLjY0MiAtMS41NjQgMy42NDJIMTkxLjA0MXpNMTg4Ljc0NyAxMjMuNDE5aDEuNDg1bDQuMDE0IDkuMTY5aC0xLjY5NGwtMC45MjUtMi4xOThoLTQuMzE0bC0wLjkzNyAyLjE5OGgtMS42NDNMMTg4Ljc0NyAxMjMuNDE5eiIvPgogICAgPC9nPgogIDwvc3dpdGNoPgo8L3N2Zz4K";
+
+        let currentStage = "intermediate"; // "intermediate", "elementary", "both"
+        let currentWeek = "14";
+        let currentPaperSize = "A4"; // "A4" or "A3"
+        let isEditMode = false;
+        let isMobileViewActive = false;
+        let currentMobileGrade = "1م";
+
+        const WEEK_NAMES = {
+            "14": "الرابع عشر",
+            "15": "الخامس عشر",
+            "16": "السادس عشر",
+            "17": "السابع عشر",
+            "18": "الثامن عشر"
+        };
+
+        const SUBJECT_ICONS = {
+            "الدراسات الإسلامية": "📖",
+            "لغتي": "📝",
+            "الاجتماعيات": "🌍",
+            "الرياضيات": "📐",
+            "العلوم": "🔬",
+            "اللغة الإنجليزية": "🔤",
+            "المهارات الرقمية": "💻",
+            "التربية البدنية": "⚽",
+            "التربية الفنية": "🎨",
+            "التفكير الناقد": "🧠",
+            "المهارات الحياتية": "🏠"
+        };
+
+        // أعمدة المرحلة المتوسطة
+        const INTER_COLUMNS = [
+            { key: "grade", label: "الصف", width: "4%" },
+            { key: "الدراسات الإسلامية", label: "الدراسات الإسلامية", width: "17%" },
+            { key: "لغتي", label: "لغتي", width: "10%" },
+            { key: "الاجتماعيات", label: "الاجتماعيات", width: "8%" },
+            { key: "الرياضيات", label: "الرياضيات", width: "10%" },
+            { key: "العلوم", label: "العلوم", width: "9%" },
+            { key: "اللغة الإنجليزية", label: "E", width: "8%" },
+            { key: "المهارات الرقمية", label: "الرقمية", width: "8%" },
+            { key: "التربية البدنية", label: "البدنية", width: "7%" },
+            { key: "التربية الفنية", label: "الفنية", width: "7%" },
+            { key: "التفكير الناقد", label: "تفكير ناقد", width: "6%" },
+            { key: "المهارات الحياتية", label: "الحياتية", width: "6%" }
+        ];
+
+        // أعمدة المرحلة الابتدائية
+        const ELEM_COLUMNS = [
+            { key: "grade", label: "الصف", width: "5%" },
+            { key: "الدراسات الإسلامية", label: "الدراسات الإسلامية", width: "18%" },
+            { key: "لغتي", label: "لغتي", width: "12%" },
+            { key: "الاجتماعيات", label: "الاجتماعيات", width: "9%" },
+            { key: "الرياضيات", label: "الرياضيات", width: "11%" },
+            { key: "العلوم", label: "العلوم", width: "10%" },
+            { key: "اللغة الإنجليزية", label: "E", width: "9%" },
+            { key: "المهارات الرقمية", label: "الرقمية", width: "8%" },
+            { key: "التربية البدنية", label: "البدنية", width: "7%" },
+            { key: "التربية الفنية", label: "الفنية", width: "6%" },
+            { key: "المهارات الحياتية", label: "الحياتية", width: "5%" }
+        ];
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderOfficialSheets();
+            renderMobileCards();
+            
+            // في الهواتف الصغيرة افتراضياً تفعيل عرض البطاقات
+            if (window.innerWidth <= 768) {
+                isMobileViewActive = true;
+                updateViewModeButton();
+                document.getElementById("planSheetsContainer").style.display = "none";
+                document.getElementById("mobileCardsView").style.display = "block";
+            }
+        });
+
+        // ضمان تحديث محتوى الورقة الرسمية قبل الطباعة دائماً
+        window.addEventListener("beforeprint", () => {
+            renderOfficialSheets();
+            document.getElementById("planSheetsContainer").style.display = "block";
+        });
+
+        window.addEventListener("afterprint", () => {
+            if (isMobileViewActive) {
+                document.getElementById("planSheetsContainer").style.display = "none";
+            }
+        });
+
+        function switchStage(stage) {
+            currentStage = stage;
+            document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+            const activeBtn = document.querySelector(`.tab-btn.${stage}`);
+            if (activeBtn) activeBtn.classList.add("active");
+
+            // تعديل الثيم
+            document.body.classList.remove("theme-intermediate", "theme-elementary", "theme-both");
+            document.body.classList.add(`theme-${stage}`);
+
+            // ضبط الصف الافتراضي لعرض الجوال
+            if (stage === "elementary") {
+                currentMobileGrade = "4ب";
+            } else {
+                currentMobileGrade = "1م";
+            }
+
+            renderOfficialSheets();
+            renderMobileCards();
+        }
+
+        function switchWeek(week) {
+            currentWeek = week;
+            document.querySelectorAll(".week-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.getAttribute("data-week") === week);
+            });
+            renderOfficialSheets();
+            renderMobileCards();
+        }
+
+        function setPaperSize(size) {
+            currentPaperSize = size;
+            document.getElementById("pillA4").classList.toggle("active", size === "A4");
+            document.getElementById("pillA3").classList.toggle("active", size === "A3");
+
+            document.body.classList.remove("paper-a4", "paper-a3");
+            document.body.classList.add(size === "A3" ? "paper-a3" : "paper-a4");
+
+            // تحديث قاعدة @page ديناميكياً
+            const dynamicStyle = document.getElementById("dynamicPrintStyle");
+            if (dynamicStyle) {
+                if (size === "A3") {
+                    dynamicStyle.innerHTML = "@page { size: A3 landscape; margin: 10mm 12mm; }";
+                } else {
+                    dynamicStyle.innerHTML = "@page { size: A4 landscape; margin: 5mm 8mm; }";
+                }
+            }
+            showToast(`تم ضبط مقاس الطباعة على ${size} بالعرض`);
+        }
+
+        function toggleMobileView() {
+            isMobileViewActive = !isMobileViewActive;
+            updateViewModeButton();
+            const sheetsContainer = document.getElementById("planSheetsContainer");
+            const mobileView = document.getElementById("mobileCardsView");
+
+            if (isMobileViewActive) {
+                sheetsContainer.style.display = "none";
+                mobileView.style.display = "block";
+                renderMobileCards();
+            } else {
+                sheetsContainer.style.display = "block";
+                mobileView.style.display = "none";
+                renderOfficialSheets();
+            }
+        }
+
+        function updateViewModeButton() {
+            const btn = document.getElementById("btnToggleMobileView");
+            if (btn) {
+                btn.innerHTML = isMobileViewActive ? "📄 عرض ورقة الطباعة" : "📱 عرض الجوال الذكي";
+                btn.style.backgroundColor = isMobileViewActive ? "#059669" : "#0284c7";
+            }
+        }
+
+        /* === ريندر ورقة الطباعة الرسمية === */
+        function renderOfficialSheets() {
+            const container = document.getElementById("planSheetsContainer");
+            if (!container) return;
+            container.innerHTML = "";
+
+            if (currentStage === "intermediate") {
+                container.innerHTML = generateSheetHtml("intermediate", currentWeek, false);
+            } else if (currentStage === "elementary") {
+                container.innerHTML = generateSheetHtml("elementary", currentWeek, false);
+            } else {
+                // عرض المرحلتين معاً
+                container.innerHTML = generateSheetHtml("intermediate", currentWeek, true) + 
+                                      generateSheetHtml("elementary", currentWeek, false);
+            }
+        }
+
+        function generateSheetHtml(stage, week, hasPageBreak) {
+            const isInter = (stage === "intermediate");
+            const stageTitle = isInter ? "المتوسطة" : "الابتدائية";
+            const sheetClass = isInter ? "sheet-intermediate" : "sheet-elementary";
+            const breakClass = hasPageBreak ? "page-break-print" : "";
+            const columns = isInter ? INTER_COLUMNS : ELEM_COLUMNS;
+            const weekTitle = WEEK_NAMES[week] || week;
+            const stageData = isInter ? INTER_DATA[week] : ELEM_DATA[week];
+
+            if (!stageData) return "<div class='plan-sheet-wrapper'>لا توجد بيانات لهذا الأسبوع</div>";
+
+            const grades = stageData.grades || {};
+
+            let tableHeaderHtml = "<tr>";
+            columns.forEach(col => {
+                tableHeaderHtml += `<th style="width: ${col.width};">${col.label}</th>`;
+            });
+            tableHeaderHtml += "</tr>";
+
+            let tableRowsHtml = "";
+            for (const [gradeName, subjects] of Object.entries(grades)) {
+                tableRowsHtml += "<tr>";
+                tableRowsHtml += `<td class="grade-col">${gradeName}</td>`;
+
+                for (let i = 1; i < columns.length; i++) {
+                    const col = columns[i];
+                    let rawVal = subjects[col.key] || "-";
+                    
+                    if (col.key === "التفكير الناقد" && (gradeName === "1م" || gradeName === "2م")) {
+                        rawVal = "-";
+                    }
+
+                    const formattedHtml = formatLessonContent(rawVal);
+
+                    tableRowsHtml += `
+                        <td class="lesson-cell" contenteditable="${isEditMode ? 'true' : 'false'}">
+                            <button class="copy-cell-btn no-print" onclick="copyCell(this)" title="نسخ هذا الدرس">📋 نسخ</button>
+                            <div class="cell-content">${formattedHtml}</div>
+                        </td>
+                    `;
+                }
+                tableRowsHtml += "</tr>";
+            }
+
+            return `
+                <div class="plan-sheet-wrapper ${sheetClass} ${breakClass}">
+                    <div class="plan-sheet">
+                        <!-- ترويسة الورقة الرسمية المطابقة للوزارة مع شعار الرؤية والوزارة المكبرين -->
+                        <div class="sheet-header">
+                            <div class="cliche-right">
+                                <div>المملكة العربية السعودية</div>
+                                <div>وزارة التعليم</div>
+                                <div>الإدارة العامة للتعليم بالرياض</div>
+                                <div>مدرسة العفج المتوسطة والابتدائية</div>
+                            </div>
+                            <div class="title-center">
+                                <div class="main-heading">الخطة التعليمية للفصل الأول للعام 1448 هـ</div>
+                                <div class="sub-heading-bar">
+                                    <span class="badge-info">الأسبوع / <strong>${weekTitle}</strong></span>
+                                    <span class="badge-info">المرحلة / <strong>${stageTitle}</strong></span>
+                                </div>
+                            </div>
+                            <div class="logos-container">
+                                <img src="${MOE_LOGO}" alt="وزارة التعليم" class="moe-logo" title="وزارة التعليم">
+                                <img src="${VISION_LOGO}" alt="رؤية 2030" class="v2030-logo" title="رؤية 2030">
+                            </div>
+                        </div>
+
+                        <!-- جدول الخطة الكامل -->
+                        <div class="table-responsive">
+                            <table class="plan-table">
+                                <thead>
+                                    ${tableHeaderHtml}
+                                </thead>
+                                <tbody>
+                                    ${tableRowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- خانة توقيع مدير المدرسة فقط (بدون المشرف وبدون المعلمين) -->
+                        <div class="signatures-box-single">
+                            <div class="sig-manager-block">
+                                <div class="sig-title">مدير المدرسة</div>
+                                <div class="sig-line">...................................................</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* === ريندر عرض بطاقات الجوال الذكي === */
+        function renderMobileCards() {
+            const tabsContainer = document.getElementById("mobileGradeTabs");
+            const gridContainer = document.getElementById("mobileCardsGrid");
+            if (!tabsContainer || !gridContainer) return;
+
+            let availableGrades = [];
+            if (currentStage === "intermediate") {
+                availableGrades = ["1م", "2م", "3م"];
+            } else if (currentStage === "elementary") {
+                availableGrades = ["4ب", "5ب", "6ب"];
+            } else {
+                availableGrades = ["1م", "2م", "3م", "4ب", "5ب", "6ب"];
+            }
+
+            if (!availableGrades.includes(currentMobileGrade)) {
+                currentMobileGrade = availableGrades[0];
+            }
+
+            tabsContainer.innerHTML = availableGrades.map(g => `
+                <button class="grade-pill-btn ${g === currentMobileGrade ? 'active' : ''}" onclick="selectMobileGrade('${g}')">
+                    الصف ${g}
+                </button>
+            `).join("");
+
+            const isInterGrade = ["1م", "2م", "3م"].includes(currentMobileGrade);
+            const stageData = isInterGrade ? INTER_DATA[currentWeek] : ELEM_DATA[currentWeek];
+            const subjects = (stageData && stageData.grades && stageData.grades[currentMobileGrade]) || {};
+
+            let cardsHtml = "";
+            for (const [subjName, content] of Object.entries(subjects)) {
+                if (subjName === "التفكير الناقد" && (currentMobileGrade === "1م" || currentMobileGrade === "2م")) {
+                    continue;
+                }
+                const icon = SUBJECT_ICONS[subjName] || "📘";
+                const formattedHtml = formatLessonContent(content);
+                const plainText = content.replace(/'/g, "\'");
+                const encodedWhatsapp = encodeURIComponent(`*خطة ${subjName} - الصف ${currentMobileGrade} (الأسبوع ${WEEK_NAMES[currentWeek]})*\n\n${content}`);
+
+                cardsHtml += `
+                    <div class="subject-card">
+                        <div>
+                            <div class="card-header">
+                                <div class="card-subject-name">
+                                    <span>${icon}</span>
+                                    <span>${subjName}</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                ${formattedHtml}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-card-copy" onclick="copyText('${plainText}')">
+                                📋 نسخ المادة
+                            </button>
+                            <a class="btn-card-whatsapp" href="https://api.whatsapp.com/send?text=${encodedWhatsapp}" target="_blank">
+                                💬 إرسال واتساب
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            gridContainer.innerHTML = cardsHtml;
+        }
+
+        function selectMobileGrade(grade) {
+            currentMobileGrade = grade;
+            renderMobileCards();
+        }
+
+        function formatLessonContent(text) {
+            if (!text || text.trim() === "-" || text.trim() === "") return "-";
+            const lines = text.split("\n");
+            return lines.map(line => {
+                let cleanLine = line.trim();
+                if (!cleanLine) return "";
+                
+                if (cleanLine.includes(":")) {
+                    const colonIdx = cleanLine.indexOf(":");
+                    const prefix = cleanLine.substring(0, colonIdx + 1);
+                    const rest = cleanLine.substring(colonIdx + 1);
+                    return `<span class="bullet-item"><span class="branch-tag">${prefix}</span>${rest}</span>`;
+                }
+                return `<span class="bullet-item">${cleanLine}</span>`;
+            }).filter(Boolean).join("");
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btn = document.getElementById("btnToggleEdit");
+            btn.innerHTML = isEditMode ? "💾 إيقاف التعديل" : "✏️ تعديل النصوص يدويًا";
+            btn.style.backgroundColor = isEditMode ? "#dc2626" : "#e2e8f0";
+            btn.style.color = isEditMode ? "#ffffff" : "#334155";
+            document.querySelectorAll(".lesson-cell").forEach(cell => {
+                cell.setAttribute("contenteditable", isEditMode ? "true" : "false");
+            });
+            document.body.classList.toggle("editable-active", isEditMode);
+            showToast(isEditMode ? "تم تفعيل التعديل! يمكنك الضغط على أي خلية وتعديلها مباشرة." : "تم حفظ التعديلات!");
+        }
+
+        function copyCell(btn) {
+            const cellContent = btn.parentElement.querySelector(".cell-content");
+            if (cellContent) {
+                copyText(cellContent.innerText.trim());
+            }
+        }
+
+        function copyText(text) {
+            if (!text || text === "-") return;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast("تم نسخ النص إلى الحافظة!");
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+            showToast("تم نسخ النص إلى الحافظة!");
+        }
+
+        function copyFullPlanTable() {
+            const activeSheets = document.querySelectorAll(".plan-table");
+            if (!activeSheets.length) return;
+
+            let fullText = `خطة مدرسة العفج - الأسبوع ${WEEK_NAMES[currentWeek] || currentWeek}\n\n`;
+            activeSheets.forEach((tbl) => {
+                const rows = tbl.querySelectorAll("tr");
+                rows.forEach(r => {
+                    const cells = Array.from(r.querySelectorAll("th, td")).map(c => c.innerText.replace(/\n/g, " ").trim());
+                    fullText += cells.join(" | ") + "\n";
+                });
+                fullText += "\n--------------------------------------------\n";
+            });
+
+            copyText(fullText);
+            showToast("تم نسخ جدول الخطة بالكامل!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById("toastNotification");
+            toast.textContent = msg;
+            toast.style.display = "block";
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
